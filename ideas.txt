@@ -1,0 +1,7 @@
+@client.event
+async def on_member_leave(member):
+    ...
+
+@client.event
+async def on_member_join(member):
+    ...
