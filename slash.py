@@ -1,3 +1,5 @@
+"Personal discord bot by Faris#5260"
+
 try:
     import discord
     import variables
@@ -9,13 +11,14 @@ try:
     import string
     import webbrowser
     import wikipediaapi
+    import asyncio
     from discord.ext import commands
     from python_aternos import Client as aternosClient
     from discord import app_commands
 except Exception as e:
     print("Error (Import): "+e)
 
-themeColor = discord.Color.blurple()
+themeColor = discord.Color.from_rgb(48, 34, 199)
 errorColor = discord.Color.red()
 
 client = commands.Bot(
@@ -136,6 +139,12 @@ async def help(ctx, *, type : str):
             description=variables.ADMIN_COMMANDS,
             color=themeColor
         ), ephemeral=True)
+    elif type.lower() == "color" or type.lower() == "colour":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="__Color__",
+            description=variables.COLOR_COMMANDS,
+            color=themeColor
+        ), ephemeral=True)
     elif type.lower() == "total":
         await ctx.response.send_message(embed=discord.Embed(
             title="Total number of commands",
@@ -191,9 +200,9 @@ async def servers(ctx):
     ), ephemeral=True)
 
 # Get a user's Profile picture
-@client.tree.command(name="avatar", description="Give an enlarged image of a user's profile picture")
-@app_commands.describe(user="User you want to get the avatar of")
-async def avatar(ctx, user : discord.Member):
+@client.tree.command(name="pfp", description="Give an enlarged image of a user's profile picture")
+@app_commands.describe(user="User you want to get the profile picture of")
+async def pfp(ctx, user : discord.Member):
     await ctx.response.send_message(user.avatar)
 
 # Stop the bot
@@ -367,6 +376,7 @@ async def hypotenuse(ctx, leg1:float, leg2:float):
 @app_commands.describe(question="Multiplication is * and division is /")
 async def evalute(ctx, *, question : str):
     try:
+        question = question.replace(",","")
         answer = eval(question)
         await ctx.response.send_message(f"{question} = **__{answer}__**")
     except ZeroDivisionError:
@@ -378,8 +388,14 @@ async def evalute(ctx, *, question : str):
 @client.tree.command(name="exponent", description="Multiply the base by the amount of exponent")
 @app_commands.describe(base="Base of the number", exponent="Exponent of the base")
 async def exponent(ctx, base : int, exponent : int):
-    if exponent == 1:
+    if exponent == 0 and base != 0:
         await ctx.response.send_message("1")
+    elif exponent == 0 and base == 0:
+        await ctx.response.send_message(embed=discord.Embed(
+            title="__Error__ ❌",
+            description="You cannot have a number with its base and exponent as 0",
+            colour=errorColor
+        ), ephemeral=True)
     else:
         await ctx.response.send_message(str(base ** exponent))
 
@@ -449,43 +465,39 @@ async def diagonals(ctx, sides : int):
             await ctx.response.send_message(str((sides * (sides - 3)) / 2))
         except Exception as e:
             await ctx.response.send_message(embed=discord.Embed(
-            title="**__Error__ ❌**",
-            description=e,
-            colour=errorColor
-        ), ephemeral=True)
+                title="**__Error__ ❌**",
+                description=e,
+                colour=errorColor
+            ), ephemeral=True)
 
 """Question math"""
 # Ask an addition question
 @client.tree.command(name="question_add", description="Ask you an addition question")
 async def question_add(ctx):
-    num1 = random.randrange(10, 10000)
-    num2 = random.randrange(10, 10000)
-
+    num1 = random.randrange(10, 1000)
+    num2 = random.randrange(10, 1000)
     await ctx.response.send_message(f"{str(num1)} + {str(num2)} = ||{str(num1 + num2)}||")
 
 # Ask a subtraction question
 @client.tree.command(name="question_subtract", description="Ask you a subtract question")
 async def question_subtract(ctx):
-    num1 = random.randrange(10, 10000)
-    num2 = random.randrange(10, 10000)
-
+    num1 = random.randrange(10, 1000)
+    num2 = random.randrange(10, 1000)
     await ctx.response.send_message(f"{str(num1)} - {str(num2)} = ||{str(num1 - num2)}||")
 
 # Ask a multiplication question
 @client.tree.command(name="question_multiply", description="Ask you a multiplication question")
 async def question_multiply(ctx):
-    num1 = random.randrange(10, 10000)
-    num2 = random.randrange(10, 10000)
-
+    num1 = random.randrange(10, 1000)
+    num2 = random.randrange(10, 1000)
     await ctx.response.send_message(f"{str(num1)} x {str(num2)} = ||{str(num1 * num2)}||")
 
 # Ask a division question
 @client.tree.command(name="question_divide", description="Ask you a division question")
 @commands.cooldown(1, 1, commands.BucketType.user)
 async def question_divide(ctx):
-    num1 = random.randrange(10, 10000)
-    num2 = random.randrange(10, 10000)
-
+    num1 = random.randrange(10, 1000)
+    num2 = random.randrange(10, 1000)
     await ctx.response.send_message(f"{str(num1)} / {str(num2)} = ||{str(num1 / num2)}||")
 
 """Time"""
@@ -594,7 +606,6 @@ async def code(ctx, filename : str, description : str, code : str):
     code = code.replace(";", "\n")
     description = description.replace(";", "\n")
     fileextension = filename.split(".")[1]
-    filenamepart = filename.split(".")[0]
 
     await ctx.response.send_message(embed=discord.Embed(
         title=filename,
@@ -624,6 +635,40 @@ async def wikisearch(ctx, topic : str):
             description=f"Topic **'{topic}'** does not exist",
             colour=errorColor
         ), ephemeral=True)
+
+# Flip a coin
+@client.tree.command(name="coinflip", description="Flip a cion and have equal chance of getting heads or tails")
+async def coinflip(ctx):
+    await ctx.response.send_message("The coin landed on **"+random.choice(["Tails", "Heads"])+"**")
+
+"""Color"""
+@client.tree.command(name="rgb", description="Show you the color you made with RGB")
+@app_commands.describe(r="Red value", g="Green value", b="Blue value")
+async def rgb(ctx, r : int, g : int, b : int):
+    if r > 255 or g > 255 or b > 255:
+        await ctx.response.send_message(embed=discord.Embed(
+            title="**__Error__ ❌**",
+            description="Values cannot be higher than 255",
+            colour=errorColor
+        ), ephemeral=True)
+    elif r < 0 or g < 0 or b < 0:
+        await ctx.response.send_message(embed=discord.Embed(
+            title="**__Error__ ❌**",
+            description="Values cannot be lower than 0",
+            colour=errorColor
+        ), ephemeral=True)
+    else:
+        await ctx.response.send_message(embed=discord.Embed(
+            title=f"Color from RGB __{r} {g} {b}__",
+            color=discord.Color.from_rgb(r, g, b)
+        ))
+
+@client.tree.command(name="randomcolor", description="Return a random color")
+async def randomcolor(ctx):
+    await ctx.response.send_message(embed=discord.Embed(
+        description="Random color",
+        color=discord.Color.random()
+    ))
 
 """Administrator"""
 # Kick a user
@@ -678,9 +723,9 @@ async def ban(ctx, member : discord.Member, *, reason : str = None):
 
 """Science"""
 # The periodic table input is symbol
-@client.tree.command(name="element", description="Input the symbol of any element to recieve its name")
+@client.tree.command(name="elementsymbol", description="Input the symbol of any element to recieve its name")
 @app_commands.describe(element="Symbol of the element")
-async def element(ctx, *, element : str):
+async def elementsymbol(ctx, *, element : str):
     elem = element
     if elem == "H":
         await ctx.response.send_message(embed=discord.Embed(
@@ -882,14 +927,19 @@ async def element(ctx, *, element : str):
             title="40. Zirconium",
             color=themeColor
         ))
+    elif elem == "Nb":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="41. Niobium",
+            color=themeColor
+        ))
     elif elem == "Mo":
         await ctx.response.send_message(embed=discord.Embed(
-            title="41. Molybdenum",
+            title="42. Molybdenum",
             color=themeColor
         ))
     elif elem == "Tc":
         await ctx.response.send_message(embed=discord.Embed(
-            title="42. Technetium",
+            title="43. Technetium",
             color=themeColor
         ))
     elif elem == "Ru":
@@ -1281,9 +1331,617 @@ async def element(ctx, *, element : str):
         ), ephemeral=True)
 
 # The periodic table to get the symbol
-@client.tree.command(name="elementsymbol", description="Input the name of any element to recieve its symbol")
+@client.tree.command(name="elementnumber", description="Return the name of the element if given the atomic number")
+@app_commands.describe(number="The atomic number")
+async def elementnumber(ctx, *, number : str):
+    elem = number
+    if elem == "1":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Hydrogen H",
+            color=themeColor
+        ))
+    elif elem == "2":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Helium He",
+            color=themeColor
+        ))
+    elif elem == "3":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Lithium Li",
+            color=themeColor
+        ))
+    elif elem == "4":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Berylium Be",
+            color=themeColor
+        ))
+    elif elem == "5":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Boron B",
+            color=themeColor
+        ))
+    elif elem == "6":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Carbon C",
+            color=themeColor
+        ))
+    elif elem == "7":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Nitrogen N",
+            color=themeColor
+        ))
+    elif elem == "8":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Oxygen O",
+            color=themeColor
+        ))
+    elif elem == "9":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Flourine F",
+            color=themeColor
+        ))
+    elif elem == "10":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Neon Ne",
+            color=themeColor
+        ))
+    elif elem == "11":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Sodium Na",
+            color=themeColor
+        ))
+    elif elem == "12":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Magnesium Mg",
+            color=themeColor
+        ))
+    elif elem == "13":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Aluminium Al",
+            color=themeColor
+        ))
+    elif elem == "14":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Silicon Si",
+            color=themeColor
+        ))
+    elif elem == "15":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Phosphorous P",
+            color=themeColor
+        ))
+    elif elem == "16":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Sulphur S",
+            color=themeColor
+        ))
+    elif elem == "17":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Chlorine Cl",
+            color=themeColor
+        ))
+    elif elem == "18":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Argon Ar",
+            color=themeColor
+        ))
+    elif elem == "19":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Potassium K",
+            color=themeColor
+        ))
+    elif elem == "20":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Calcium Ca",
+            color=themeColor
+        ))
+    elif elem == "21":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Scandium Sc",
+            color=themeColor
+        ))
+    elif elem == "22":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Titanium Ti",
+            color=themeColor
+        ))
+    elif elem == "23":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Vanadium V",
+            color=themeColor
+        ))
+    elif elem == "24":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Chromium Cr",
+            color=themeColor
+        ))
+    elif elem == "25":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Manganese Mn",
+            color=themeColor
+        ))
+    elif elem == "26":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Iron Fe",
+            color=themeColor
+        ))
+    elif elem == "27":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Cobalt Co",
+            color=themeColor
+        ))
+    elif elem == "28":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Nickel Ni",
+            color=themeColor
+        ))
+    elif elem == "29":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Copper Cu",
+            color=themeColor
+        ))
+    elif elem == "30":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Zinc Zn",
+            color=themeColor
+        ))
+    elif elem == "31":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Galium Ga",
+            color=themeColor
+        ))
+    elif elem == "32":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Germanium Ge",
+            color=themeColor
+        ))
+    elif elem == "33":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Arsenic As",
+            color=themeColor
+        ))
+    elif elem == "34":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Selenium Se",
+            color=themeColor
+        ))
+    elif elem == "35":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Bromine Br",
+            color=themeColor
+        ))
+    elif elem == "36":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Krypton Kr",
+            color=themeColor
+        ))
+    elif elem == "37":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Rubidium Rb",
+            color=themeColor
+        ))
+    elif elem == "38":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Strontium Sr",
+            color=themeColor
+        ))
+    elif elem == "39":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Yttrium Y",
+            color=themeColor
+        ))
+    elif elem == "40":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Zirconium Zr",
+            color=themeColor
+        ))
+    elif elem == "41":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Niobium Nb",
+            color=themeColor
+        ))
+    elif elem == "42":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Molybdenum Mo",
+            color=themeColor
+        ))
+    elif elem == "43":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Technetium Tc",
+            color=themeColor
+        ))
+    elif elem == "44":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Ruthenium Ru",
+            color=themeColor
+        ))
+    elif elem == "45":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Rhodium Rh",
+            color=themeColor
+        ))
+    elif elem == "46":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Palladium Pd",
+            color=themeColor
+        ))
+    elif elem == "47":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Silver Ag",
+            color=themeColor
+        ))
+    elif elem == "48":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Cadmium Cd",
+            color=themeColor
+        ))
+    elif elem == "49":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Indium In",
+            color=themeColor
+        ))
+    elif elem == "50":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Tin Sn",
+            color=themeColor
+        ))
+    elif elem == "51":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Antimony Sb",
+            color=themeColor
+        ))
+    elif elem == "52":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Tellurium Te",
+            color=themeColor
+        ))
+    elif elem == "53":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Iodine I",
+            color=themeColor
+        ))
+    elif elem == "54":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Xenon Xe",
+            color=themeColor
+        ))
+    elif elem == "55":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Cesium Cs",
+            color=themeColor
+        ))
+    elif elem == "56":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Barium Ba",
+            color=themeColor
+        ))
+    elif elem == "57":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Lanthanum La",
+            color=themeColor
+        ))
+    elif elem == "58":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Cerium Ce",
+            color=themeColor
+        ))
+    elif elem == "59":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Praseodymium Pr",
+            color=themeColor
+        ))
+    elif elem == "60":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Neodymium Nd",
+            color=themeColor
+        ))
+    elif elem == "61":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Promethium Pm",
+            color=themeColor
+        ))
+    elif elem == "62":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Samarium Sm",
+            color=themeColor
+        ))
+    elif elem == "63":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Europium Eu",
+            color=themeColor
+        ))
+    elif elem == "64":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Gadolinium Gd",
+            color=themeColor
+        ))
+    elif elem == "65":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Terbium Tb",
+            color=themeColor
+        ))
+    elif elem == "66":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Dysprosium Dy",
+            color=themeColor
+        ))
+    elif elem == "67":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Holmium Ho",
+            color=themeColor
+        ))
+    elif elem == "68":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Erbium Er",
+            color=themeColor
+        ))
+    elif elem == "69":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Thulium Tm",
+            color=themeColor
+        ))
+    elif elem == "70":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Ytterbium Yb",
+            color=themeColor
+        ))
+    elif elem == "71":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Lutetium Lu",
+            color=themeColor
+        ))
+    elif elem == "72":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Hafnium Hf",
+            color=themeColor
+        ))
+    elif elem == "73":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Tantalum Ta",
+            color=themeColor
+        ))
+    elif elem == "74":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Tungsten W",
+            color=themeColor
+        ))
+    elif elem == "75":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Rhenium Re",
+            color=themeColor
+        ))
+    elif elem == "76":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Osmium Os",
+            color=themeColor
+        ))
+    elif elem == "77":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Irdium Ir",
+            color=themeColor
+        ))
+    elif elem == "78":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Platinum Pt",
+            color=themeColor
+        ))
+    elif elem == "79":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Gold Au",
+            color=themeColor
+        ))
+    elif elem == "80":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Mercury Hg",
+            color=themeColor
+        ))
+    elif elem == "81":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Thallium Tl",
+            color=themeColor
+        ))
+    elif elem == "82":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Lead Pb",
+            color=themeColor
+        ))
+    elif elem == "83":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Bismuth Bi",
+            color=themeColor
+        ))
+    elif elem == "84":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Polonium Po",
+            color=themeColor
+        ))
+    elif elem == "85":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Astatine A",
+            color=themeColor
+        ))
+    elif elem == "86":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Radon Rn",
+            color=themeColor
+        ))
+    elif elem == "87":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Francium Fr",
+            color=themeColor
+        ))
+    elif elem == "88":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Radium Ra",
+            color=themeColor
+        ))
+    elif elem == "89":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Actinium Ac",
+            color=themeColor
+        ))
+    elif elem == "90":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Thorium Th",
+            color=themeColor
+        ))
+    elif elem == "91":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Protactinium Pa",
+            color=themeColor
+        ))
+    elif elem == "92":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Uranium U",
+            color=themeColor
+        ))
+    elif elem == "93":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Neptunium Np",
+            color=themeColor
+        ))
+    elif elem == "94":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Plutonium Pu",
+            color=themeColor
+        ))
+    elif elem == "95":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Americium Am",
+            color=themeColor
+        ))
+    elif elem == "96":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Curium Cm",
+            color=themeColor
+        ))
+    elif elem == "97":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Berkelium Bk",
+            color=themeColor
+        ))
+    elif elem == "98":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Californium Cf",
+            color=themeColor
+        ))
+    elif elem == "99":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Einsteinium Es",
+            color=themeColor
+        ))
+    elif elem == "100":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Fermium Fm",
+            color=themeColor
+        ))
+    elif elem == "101":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Mendelevium Md",
+            color=themeColor
+        ))
+    elif elem == "102":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Nobelium No",
+            color=themeColor
+        ))
+    elif elem == "103":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Lawrencium Lr",
+            color=themeColor
+        ))
+    elif elem == "104":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Rutherfodium Rf",
+            color=themeColor
+        ))
+    elif elem == "105":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Dubnium Db",
+            color=themeColor
+        ))
+    elif elem == "106":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Seaborgium Sg",
+            color=themeColor
+        ))
+    elif elem == "107":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Bohrium Bh",
+            color=themeColor
+        ))
+    elif elem == "108":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Hassium Hs",
+            color=themeColor
+        ))
+    elif elem == "109":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Meitnerium Mt",
+            color=themeColor
+        ))
+    elif elem == "110":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Darmstadtium Ds",
+            color=themeColor
+        ))
+    elif elem == "111":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Roentgenium Rg",
+            color=themeColor
+        ))
+    elif elem == "112":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Copernicium Cn",
+            color=themeColor
+        ))
+    elif elem == "113":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Nihonium Nh",
+            color=themeColor
+        ))
+    elif elem == "114":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Flerovium Fl",
+            color=themeColor
+        ))
+    elif elem == "115":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Moscovium Mc",
+            color=themeColor
+        ))
+    elif elem == "116":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Livermorium Lv",
+            color=themeColor
+        ))
+    elif elem == "117":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Tennessine Ts",
+            color=themeColor
+        ))
+    elif elem == "118":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="Oganesson Og",
+            color=themeColor
+        ))
+    elif elem == None:
+        await ctx.response.send_message(embed=discord.Embed(
+            title="__Error__ ❌",
+            description="No element specified",
+            colour=errorColor
+        ), ephemeral=True)
+    else:
+        await ctx.response.send_message(embed=discord.Embed(
+            title="__Error__ ❌",
+            description=f"Element with number '{number}' does not exist",
+            colour=errorColor
+        ), ephemeral=True)
+
+# The periodic table to get the symbol
+@client.tree.command(name="elementname", description="Input the name of any element to recieve its symbol")
 @app_commands.describe(element="Name of the element (First letter must be capital)")
-async def elementsymbol(ctx, *, element : str):
+async def elementname(ctx, *, element : str):
     elem = element
     if elem == "Hydrogen":
         await ctx.response.send_message(embed=discord.Embed(
@@ -1485,14 +2143,19 @@ async def elementsymbol(ctx, *, element : str):
             title="40. Zr",
             color=themeColor
         ))
+    elif elem == "Niobium":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="41. Nb",
+            color=themeColor
+        ))
     elif elem == "Molybdenum":
         await ctx.response.send_message(embed=discord.Embed(
-            title="41. Mo",
+            title="42. Mo",
             color=themeColor
         ))
     elif elem == "Technetium":
         await ctx.response.send_message(embed=discord.Embed(
-            title="42. Tc",
+            title="43. Tc",
             color=themeColor
         ))
     elif elem == "Ruthenium":
@@ -2036,6 +2699,21 @@ async def echo(ctx, channelid : str, *, text : str):
             description=e,
             colour=errorColor
         ), ephemeral=True)
+    else:
+        await ctx.response.send_message(embed = discord.Embed(
+            title="__Error__ ❌",
+            description="You do now have permissions to run this command",
+            colour = errorColor
+        ), ephemeral=True)
+
+# Make the bot type for a specific time
+@client.tree.command(name="starttyping", description="(Requires being bot's owner) Make the bot look like its typing for any amount of time")
+@app_commands.describe(time="The amount of time the bot is typing for (In seconds)")
+async def starttyping(ctx, time : int):
+    if ctx.user.id == client.owner_id:
+        await ctx.response.send_message("Started typing for **"+str(time)+"** seconds", ephemeral=True)
+        async with ctx.channel.typing():
+            await asyncio.sleep(time)
     else:
         await ctx.response.send_message(embed = discord.Embed(
             title="__Error__ ❌",
