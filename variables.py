@@ -1,4 +1,3 @@
-import token
 """
 # Variables:
  - PREFIX
@@ -24,7 +23,7 @@ import token
 """
 PREFIX:str='/'
 OWNERID:int=804233465293570068
-TOKEN:str=token.Token
+TOKEN:str="MTAyMjgwNTM5NDQwNzU1NTExNQ.GY0rMY.dXlHb4s77Yko182Xgd2t3M0Y24fxARtpuxrfH0"
 DEVELOPER_PORTAL:str="https://discord.com/developers/applications/1022805394407555115/"
 
 TOTAL_PRIVATE_COMMANDS_SLASH:int=5

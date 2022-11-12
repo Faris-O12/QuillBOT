@@ -16,7 +16,7 @@ try:
     from python_aternos import Client as aternosClient
     from discord import app_commands
 except Exception as e:
-    print("Error (Import): "+e)
+    print("Error (Import): "+str(e))
 
 themeColor = discord.Color.from_rgb(48, 34, 199)
 errorColor = discord.Color.red()
