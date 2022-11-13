@@ -15,11 +15,8 @@ try:
     from discord.ext import commands
     from python_aternos import Client as aternosClient
     from discord import app_commands
-except Exception as e:
-    print(f"Error (Import): {e}")
-
-themeColor = discord.Color.from_rgb(48, 34, 199)
-errorColor = discord.Color.red()
+except Exception as errorstr:
+    print(f"Error (Import): {errorstr}")
 
 client = commands.Bot(
     command_prefix=variables.PREFIX,
@@ -28,6 +25,9 @@ client = commands.Bot(
     intents=discord.Intents.all(),
     owner_id=variables.OWNERID,
 )
+
+themeColor = discord.Color.from_rgb(48, 34, 199)
+errorColor = discord.Color.red()
 
 os.chdir(r"G:\\QuillBOT")
 client.remove_command('help')
@@ -45,8 +45,8 @@ async def on_ready():
         synced = await client.tree.sync()
         print(f"Synced {len(synced)} commands\n")
         variables.TOTAL_COMMANDS_SLASH = int(len(synced) - variables.TOTAL_PRIVATE_COMMANDS_SLASH)
-    except Exception as e:
-        print("Error: "+e)
+    except Exception as errorstr:
+        print("Error: "+errorstr)
 
 @client.event
 async def on_resumed():
@@ -60,8 +60,8 @@ async def on_resumed():
         synced = await client.tree.sync()
         print(f"Synced {len(synced)} commands\n")
         variables.TOTAL_COMMANDS_SLASH = int(len(synced) - variables.TOTAL_PRIVATE_COMMANDS_SLASH)
-    except Exception as e:
-        print("Error: "+e)
+    except Exception as errorstr:
+        print("Error: "+errorstr)
 
 @client.event
 async def on_message(message):
@@ -372,8 +372,8 @@ async def evalute(ctx, *, question : str):
         await ctx.response.send_message(f"{question} = **__{answer}__**")
     except ZeroDivisionError:
         await ctx.response.send_message("Cannot divide with 0")
-    except Exception as e:
-        await ctx.response.send_message("__Error__: "+e)
+    except Exception as errorstr:
+        await ctx.response.send_message("__Error__: "+errorstr)
 
 # Exponenet a number with another number
 @client.tree.command(name="exponent", description="Multiply the base by the amount of exponent")
@@ -454,10 +454,10 @@ async def diagonals(ctx, sides : int):
     else:
         try:
             await ctx.response.send_message(str((sides * (sides - 3)) / 2))
-        except Exception as e:
+        except Exception as errorstr:
             await ctx.response.send_message(embed=discord.Embed(
                 title="**__Error__ ❌**",
-                description=e,
+                description=errorstr,
                 colour=errorColor
             ), ephemeral=True)
 
@@ -674,10 +674,10 @@ async def kick(ctx, member : discord.Member, *, reason : str = None):
                 description="Reason: "+str(reason),
                 colour=themeColor
             ))
-        except Exception as e:
+        except Exception as errorstr:
             await ctx.response.send_message(embed=discord.Embed(
                 title=f"**__Error__ ❌**",
-                description=e,
+                description=errorstr,
                 colour=errorColor
             ), ephemeral=True)
     else:
@@ -699,10 +699,10 @@ async def ban(ctx, member : discord.Member, *, reason : str = None):
                 description="Reason: "+str(reason),
                 colour=themeColor
             ))
-        except Exception as e:
+        except Exception as errorstr:
             await ctx.response.send_message(embed=discord.Embed(
                 title=f"**__Error__ ❌**",
-                description=e,
+                description=errorstr,
                 colour=errorColor
             ), ephemeral=True)
     else:
@@ -2684,10 +2684,10 @@ async def echo(ctx, channelid : str, *, text : str):
             channel = client.get_channel(int(channelid))
             await channel.send(text)
             await ctx.response.send_message(embed=discord.Embed(description=":white_check_mark: Message sent!", colour=themeColor), ephemeral=True)
-        except Exception as e:
+        except Exception as errorstr:
             await ctx.response.send_message(embed = discord.Embed(
             title="__Error__ ❌",
-            description=e,
+            description=errorstr,
             colour=errorColor
         ), ephemeral=True)
     else:
@@ -2725,10 +2725,10 @@ async def runpy(ctx, *, script : str):
                 description=f"```py\n{script}\n```",
                 colour = themeColor
             ), ephemeral=True)
-        except Exception as e:
+        except Exception as errorstr:
             await ctx.response.send_message(embed = discord.Embed(
                 title="__Error__ ❌",
-                description=e,
+                description=errorstr,
                 colour = errorColor
             ), ephemeral=True)
     else:
@@ -2741,5 +2741,5 @@ async def runpy(ctx, *, script : str):
 if __name__ == "__main__":
     try:
         client.run(variables.TOKEN)
-    except Exception as e:
-        print("Error:",str(e))
+    except Exception as errorstr:
+        print("Error:",str(errorstr))
