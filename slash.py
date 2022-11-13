@@ -16,7 +16,7 @@ try:
     from python_aternos import Client as aternosClient
     from discord import app_commands
 except Exception as e:
-    print("Error (Import): "+str(e))
+    print(f"Error (Import): {e}")
 
 themeColor = discord.Color.from_rgb(48, 34, 199)
 errorColor = discord.Color.red()
@@ -71,15 +71,6 @@ async def on_message(message):
             description=variables.DESCRIPTION,
             color=themeColor
         ))
-
-@client.event
-async def on_command_error(ctx, error):
-    if isinstance(error, discord.app_commands.errors.CommandInvokeError):
-        await ctx.send(embed=discord.Embed(
-            title="__Error: __",
-            description="There was an error on invoking this command",
-            color=themeColor
-        ), ephemeral=True)
 
 """Help book"""
 @client.tree.command(name="help", description="List of every command")
