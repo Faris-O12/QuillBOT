@@ -13,6 +13,7 @@ try:
     import wikipediaapi
     import asyncio
     from discord.ext import commands
+    from stockfish import Stockfish
     from python_aternos import Client as aternosClient
     from discord import app_commands
 except Exception as errorstr:
@@ -46,7 +47,7 @@ async def on_ready():
         print(f"Synced {len(synced)} commands\n")
         variables.TOTAL_COMMANDS_SLASH = int(len(synced) - variables.TOTAL_PRIVATE_COMMANDS_SLASH)
     except Exception as errorstr:
-        print("Error: "+errorstr)
+        print("Error: "+str(errorstr))
 
 @client.event
 async def on_resumed():
@@ -61,7 +62,7 @@ async def on_resumed():
         print(f"Synced {len(synced)} commands\n")
         variables.TOTAL_COMMANDS_SLASH = int(len(synced) - variables.TOTAL_PRIVATE_COMMANDS_SLASH)
     except Exception as errorstr:
-        print("Error: "+errorstr)
+        print("Error: "+str(errorstr))
 
 @client.event
 async def on_message(message):
@@ -136,6 +137,12 @@ async def help(ctx, *, type : str):
             description=variables.COLOR_COMMANDS,
             color=themeColor
         ), ephemeral=True)
+    elif type.lower() == "chess":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="__Chess__",
+            description=variables.CHESS_COMMANDS,
+            color=themeColor
+        ), ephemeral=True)
     elif type.lower() == "total":
         await ctx.response.send_message(embed=discord.Embed(
             title="Total number of commands",
@@ -202,6 +209,7 @@ async def stop(ctx):
     if ctx.user.id == client.owner_id:
         print("Stopped")
         await ctx.response.send_message("__Stopped__", ephemeral=True)
+        await client.change_presence(status=discord.Status.dnd)
         await client.close()
     else:
         await ctx.response.send_message(embed = discord.Embed(
@@ -216,6 +224,7 @@ async def restart(ctx):
     if ctx.user.id == client.owner_id:
         print("Restarting...")
         await ctx.response.send_message("__Restarted__", ephemeral=True)
+        await client.change_presence(status=discord.Status.dnd)
         os.execv(sys.executable, ['python'] + sys.argv)
     else:
         await ctx.response.send_message(embed = discord.Embed(
@@ -2620,6 +2629,28 @@ async def cell_organelles(ctx, *, organelle : str):
             description=f"```Cell organelle '{organelle.capitalize()}' does not exist\nTypes: Cell wall, Cell membrane, Nucleas, Cytoplasm, Mitochondria, Endoplasmic reticulum, Ribosomes, Golgi appratus, Chloroplasts, Vacoules, Lysomes```",
             color=errorColor
         ), ephemeral=True)
+
+"""Chess"""
+@client.tree.command(name="bestmove", description="Find the best move in any position given its FEN")
+@app_commands.describe(fen="The FEN of the position", depth="Depth of stockfish (Maximum 15)")
+async def bestmove(ctx, fen : str, depth : int = 15):
+    if depth > 15:
+        await ctx.response.send_message(embed=discord.Embed(
+            title="__Error__ ❌",
+            description="The depth cannot be higher than 15",
+            colour=errorColor
+        ), ephemeral=True)
+    else:
+        sf = Stockfish(path=variables.STOCKFISH_PATH, depth=depth)
+        if sf.is_fen_valid(fen):
+            sf.set_fen_position(fen)
+            await ctx.response.send_message("Location - Move: **"+sf.get_best_move()+"**")
+        else:
+            await ctx.response.send_message(embed=discord.Embed(
+                title="__Error__ ❌",
+                description="FEN is Invalid",
+                colour=errorColor
+            ), ephemeral=True)
 
 """Personal commands"""
 # Set bot status

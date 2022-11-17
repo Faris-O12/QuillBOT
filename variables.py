@@ -17,7 +17,8 @@
  - MCSERVER_COMMANDS
  - SCIENCE_COMMANDS
  - ADMIN_COMMANDS
-  - COLOR_COMMANDS
+ - CHESS_COMMANDS
+ - COLOR_COMMANDS
  - SHORT_DESCRIPTION
  - DESCRIPTION
 """
@@ -28,7 +29,7 @@ DEVELOPER_PORTAL:str="https://discord.com/developers/applications/10228053944075
 
 TOTAL_PRIVATE_COMMANDS_SLASH:int=5
 TOTAL_COMMANDS_SLASH:int=0
-HELP_COMMAND_TYPES:str="Info, Utility, Math, Science, QuestionMath, Random, Time, Misc, Admin, Color, Total"
+HELP_COMMAND_TYPES:str="Info, Utility, Math, Science, QuestionMath, Random, Time, Misc, Color, Chess, Admin, Total"
 INFO_COMMANDS:str="""
 **1. prefix** : Displays the current prefix
 **2. latency** estimation(Default: True) : Get the ping latency of the client. Estimation must be either 'True' or 'False'
@@ -104,6 +105,9 @@ ADMIN_COMMANDS:str="""
 **1. kick** user : Kicks the user from the current server
 **2. ban** user : Bans the user from the current server
 """
+CHESS_COMMANDS:str="""
+**1. bestmove** fen : Find the best move of a position with its FEN
+"""
 COLOR_COMMANDS:str="""
 **1. rgb** r g b : Numbers can only be between 0 - 255
 **2. randomcolor** : Return a random color
@@ -115,8 +119,16 @@ Personal discord bot made by **Faris#5260**
 Current Prefix:  **{PREFIX}**
 Help command types: **{HELP_COMMAND_TYPES}**
 
+**Bot statuses:**
+● Online: If the bot is online, it means that the bot is functioning correctly
+● Do not disturb: The bot is on, but commands wouldn't work at the time
+● Idle: The bot is being programmed, commands might not work if the bot is restarting at the moment you run the command
+● Offline: The bot is not online or being programmed
+
 Use **/help** to get a list of every command
 ```
 Usage: /help <type>
 ```
 """
+
+STOCKFISH_PATH="G:\\QuillBOT\\stockfish_engine\\stockfish_15_x64_popcnt.exe"
