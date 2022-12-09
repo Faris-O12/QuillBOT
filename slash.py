@@ -1,10 +1,10 @@
 "Personal discord bot by Faris#5260"
 
 try:
+    import variables
     import discord
     from discord import app_commands
     from discord.ext import commands
-    import variables
     import sys
     import os
     import datetime
@@ -134,7 +134,7 @@ async def help_command(ctx, *, help_type : str):
             description=variables.ADMIN_COMMANDS,
             color=themeColor
         ), ephemeral=True)
-    elif help_type.lower() == "color" or type.lower() == "colour":
+    elif help_type.lower() == "color" or help_type.lower() == "colour":
         await ctx.response.send_message(embed=discord.Embed(
             title="__Color__",
             description=variables.COLOR_COMMANDS,
@@ -146,6 +146,12 @@ async def help_command(ctx, *, help_type : str):
             description=variables.CHESS_COMMANDS,
             color=themeColor
         ), ephemeral=True)
+    elif help_type.lower() == "code":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="__Code__",
+            description=variables.CODE_COMMANDS,
+            color=themeColor
+        ), ephemeral=True)
     elif help_type.lower() == "total":
         await ctx.response.send_message(embed=discord.Embed(
             title="Total number of commands",
@@ -154,8 +160,8 @@ async def help_command(ctx, *, help_type : str):
         ), ephemeral=True)
     else:
         await ctx.response.send_message(embed=discord.Embed(
-            title="__Types (Case Insensitive)__",
-            description=variables.HELP_COMMAND_TYPES,
+            title=f"__All Commands__",
+            description=variables.ALL_COMMANDS,
             color=themeColor
         ), ephemeral=True)
 
@@ -665,20 +671,29 @@ async def cipher(ctx, shift : int, *, text : str):
     encrypted = text.translate(table)
     await ctx.response.send_message(encrypted)
 
+"""Code"""
 # Display your code in an embed
 @client.tree.command(name="code", description="Display your code in an embed")
+@app_commands.describe(filename="Name of the file", description="Description of the code", code="The code")
 async def code(ctx, filename : str, description : str, code : str):
     "Display a code in an embed"
     code = code.replace(";", "\n")
     description = description.replace(";", "\n")
-    fileextension = filename.split(".")[1]
-
-    await ctx.response.send_message(embed=discord.Embed(
-        title=filename,
-        description=f"**Description**: {description}```{fileextension.lower()}\n{code}\n```",
-        color=themeColor
-    ))
-
+    fileextension = ""
+    try:
+        fileextension = filename.split(".")[1]
+        await ctx.response.send_message(embed=discord.Embed(
+            title=filename,
+            description=f"**Description**: {description}```{fileextension.lower()}\n{code}\n```",
+            color=themeColor
+        ))
+    except Exception as IndexError:
+        await ctx.response.send_message(embed=discord.Embed(
+            title="**__Error__ ❌**",
+            description="File name is not valid: Syntax for 'filename' `name.extension`",
+            colour=errorColor
+        ), ephemeral=True)
+        
 # Search a topic on wikipedia
 @client.tree.command(name="wikisearch", description="Seacrh wikipedia for a topic")
 @app_commands.describe(topic="The topic you want to search for")
@@ -2772,9 +2787,12 @@ async def __open(ctx, *, link : str):
         if link.startswith("https://"):
             await ctx.response.send_message("Opening "+link, ephemeral=True)
             webbrowser.open_new_tab(link)
-        elif link.lower() == "ddportal":
+        elif link.lower() == "ddp":
             await ctx.response.send_message("Opening discord developer portal", ephemeral=True)
-            webbrowser.open_new_tab(variables.DEVELOPER_PORTAL)
+            webbrowser.open_new_tab(variables.DDPORTAL_LINK)
+        elif link.lower() == "repo":
+            await ctx.response.send_message("Opening github repo", ephemeral=True)
+            webbrowser.open_new_tab(variables.REPO_LINK)
         else:
             await ctx.response.send_message("Opening https://"+link, ephemeral=True)
             webbrowser.open_new_tab("https://"+link)

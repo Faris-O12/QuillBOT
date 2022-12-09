@@ -1,33 +1,38 @@
 """
 # Variables:
- - PREFIX
- - OWNERID
- - DEVELOPER_PORTAL
- - TOTAL_PRIVATE_COMMANDS_SLASH
- - TOTAL_COMMANDS_SLASH
- - HELP_COMMAND_TYPES
- - INFO_COMMANDS
- - UTILITY_COMMANDS
- - MATH_COMMANDS
- - QUESTIONMATH_COMMANDS
- - RANDOM_COMMANDS
- - TIME_COMMANDS
- - MISC_COMMANDS
- - MCSERVER_COMMANDS
- - SCIENCE_COMMANDS
- - ADMIN_COMMANDS
- - CHESS_COMMANDS
- - COLOR_COMMANDS
- - SHORT_DESCRIPTION
- - DESCRIPTION
- - STOCKFISH_PATH
+ 1. PREFIX
+ 2. OWNERID
+ 3. REPO_LINK
+ 4. DDPORTAL_LINK
+ 5. TOTAL_PRIVATE_COMMANDS_SLASH
+ 6. TOTAL_COMMANDS_SLASH
+ 7. HELP_COMMAND_TYPES
+ 8. INFO_COMMANDS
+ 9. UTILITY_COMMANDS
+ 10. MATH_COMMANDS
+ 11. QUESTIONMATH_COMMANDS
+ 12. RANDOM_COMMANDS
+ 13. TIME_COMMANDS
+ 14. MISC_COMMANDS
+ 15. MCSERVER_COMMANDS
+ 16. SCIENCE_COMMANDS
+ 17. ADMIN_COMMANDS
+ 18. CHESS_COMMANDS
+ 19. COLOR_COMMANDS
+ 20. CODE_COMMANDS
+ 21. ALL_COMMANDS
+ 22. SHORT_DESCRIPTION
+ 23. DESCRIPTION
+ 24. STOCKFISH_PATH
 """
 
 PREFIX='/'
 OWNERID=804233465293570068
-DEVELOPER_PORTAL="https://discord.com/developers/applications/1022805394407555115/"
 
-TOTAL_PRIVATE_COMMANDS_SLASH=5
+REPO_LINK="https://github.com/Faris-O12/QuillBOT"
+DDPORTAL_LINK="https://discord.com/developers/applications/1022805394407555115/"
+
+TOTAL_PRIVATE_COMMANDS_SLASH=7
 TOTAL_COMMANDS_SLASH=0
 HELP_COMMAND_TYPES="""
 - Info
@@ -41,6 +46,7 @@ HELP_COMMAND_TYPES="""
 - Color
 - Chess
 - Admin
+- Code
 - Total
 """
 INFO_COMMANDS="""
@@ -97,9 +103,8 @@ MISC_COMMANDS="""
 **4. backward** message : Gives back message in backwards
 **5. cipher** shift text : Ceaser cipher text with the shift
 **6. rps** choice(rock, paper, scissor) : Play rock paper scissors with the bot
-**7. code** filename description code : Display your code in an embed
-**8. wikisearch** link (or title) : Sends an embed about the summary of the topic
-**9. coinflip** : Have a half chance of getting heads or tails
+**7. wikisearch** link (or title) : Sends an embed about the summary of the topic
+**8. coinflip** : Have a half chance of getting heads or tails
 """
 MCSERVER_COMMANDS="""
 **1. server_start** server : Insert the name of the server for the bot to start the minecraft server
@@ -123,6 +128,35 @@ CHESS_COMMANDS="""
 COLOR_COMMANDS="""
 **1. rgb** r g b : Numbers can only be between 0 - 255
 **2. randomcolor** : Return a random color
+"""
+CODE_COMMANDS="""
+**1. code** filename description code : Display your code in an embed
+"""
+ALL_COMMANDS=f"""
+**● Info**
+```{INFO_COMMANDS.replace("**", "")}```
+**● Utility**
+```{UTILITY_COMMANDS.replace("**", "")}```
+**● Math**
+```{MATH_COMMANDS.replace("**", "")}```
+**● QuestionMath**
+```{QUESTIONMATH_COMMANDS.replace("**", "")}```
+**● Random**
+```{RANDOM_COMMANDS.replace("**", "")}```
+**● Time**
+```{TIME_COMMANDS.replace("**", "")}```
+**● Misc**
+```{MISC_COMMANDS.replace("**", "")}```
+**● Science**
+```{SCIENCE_COMMANDS.replace("**", "")}```
+**● Admin**
+```{ADMIN_COMMANDS.replace("**", "")}```
+**● Chess**
+```{CHESS_COMMANDS.replace("**", "")}```
+**● Color**
+```{COLOR_COMMANDS.replace("**", "")}```
+**● Code**
+```{CODE_COMMANDS.replace("**", "")}
 """
 
 SHORT_DESCRIPTION="Personal discord bot made by Faris#5260"
