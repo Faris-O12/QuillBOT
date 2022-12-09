@@ -84,6 +84,7 @@ MATH_COMMANDS="""
 **18. decrease** value decrease% : Find how much the value decreases with the decrease percentage
 **19. diagonals** sides : Find the amount of diagonals a poligon can have, given its sides
 **20. factorial** number : Find the factorial of any number
+**21. lcm** numbers : Find the least common multiply of the numbers
 """
 QUESTIONMATH_COMMANDS="""
 **1. question_add** time(Default : 10) : Gives you a random addition question

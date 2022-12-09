@@ -508,6 +508,16 @@ async def factorial(ctx, number : int):
                 colour=errorColor
             ), ephemeral=True)
 
+@client.tree.command(name="lcm", description="Find the least command multiply of any number")
+@app_commands.describe(numbers="List of numbers you want to find the LCM of (Split with commas)")
+async def lcm(ctx, numbers : str):
+    "Find the LCM of the inputted number"
+    numbers = numbers.replace(" ", "")
+    lcm = 1
+    for i in list(map(int, numbers.split(","))):
+        lcm = lcm*i//math.gcd(lcm, i)
+    await ctx.response.send_message(lcm)
+
 """Question math"""
 @client.tree.command(name="question_add", description="Ask you an addition question")
 async def question_add(ctx):
