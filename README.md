@@ -10,6 +10,7 @@
 - wikipediaapi  `pip install wikipedia-api`
 - stockfish     `pip install stockfish`
 - dotenv        `pip install python-dotenv`
+- numpy         `pip install numpy`
 
 ## <u>Listeners</u>
 

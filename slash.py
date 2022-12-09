@@ -14,6 +14,7 @@ try:
     import webbrowser
     import wikipediaapi
     import asyncio
+    from numpy import cbrt
     from stockfish import Stockfish
     from dotenv import load_dotenv
 except ImportError as ImportImportError:
@@ -390,7 +391,7 @@ async def curoot(ctx, number : float):
             colour=errorColor
         ), ephemeral=True)
     else:
-        await ctx.response.send_message(str(number ** (1 / 3)))
+        await ctx.response.send_message(cbrt(number))
 
 # Get the cube of a number
 @client.tree.command(name="cube", description="Cube the provided number")
