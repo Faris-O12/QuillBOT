@@ -27,7 +27,7 @@ client = commands.Bot(
     owner_id=variables.OWNERID,
 )
 
-themeColor = discord.Color.from_rgb(48, 34, 199)
+themeColor = discord.Color.from_rgb(31, 64, 194)
 errorColor = discord.Color.red()
 
 os.chdir(r"G:\\QuillBOT")

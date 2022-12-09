@@ -48,6 +48,7 @@ HELP_COMMAND_TYPES="""
 - Admin
 - Code
 - Total
+- All
 """
 INFO_COMMANDS="""
 **1. prefix** : Displays the current prefix
