@@ -3,24 +3,24 @@
 *Made using discord.py*
 
 #### Requirements to run:
-- A `.env` file in the folder with variable `TOKEN` with your bot's token
+- A `.env` file in the folder with variable `TOKEN` with your bot's token and `QUILL_PATH` with the path of where the folder is at
 
 #### Libraries:
-- discord       `pip install discord`
-- wikipediaapi  `pip install wikipedia-api`
-- stockfish     `pip install stockfish`
-- dotenv        `pip install python-dotenv`
-- numpy         `pip install numpy`
+- discord       : **pip install discord**
+- wikipediaapi  : **pip install wikipedia-api**
+- stockfish     : **pip install stockfish**
+- dotenv        : **pip install python-dotenv**
+- numpy         : **pip install numpy**
 
 ## <u>Listeners</u>
 
-- On ready (`on_ready`)
+- On ready (on_ready)
     - Runs when the bot starts running.
     - Clears the terminal and displays information.
-- On resume (`on_resume`)
+- On resume (on_resume)
     - Runs when the bot resumes.
     - Does the same function as the On ready.
-- On message (`on_message`)
+- On message (on_message)
     - Runs when a user messages in a server (or DM) the bot is in.
     - Checks whether the bot was pinged to give a short description about it.
 

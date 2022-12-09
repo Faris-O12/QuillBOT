@@ -31,7 +31,8 @@ client = commands.Bot(
 themeColor = discord.Color.from_rgb(31, 64, 194)
 errorColor = discord.Color.red()
 
-os.chdir(r"G:\\QuillBOT")
+load_dotenv()
+os.chdir(os.getenv("QUILL_PATH"))
 client.remove_command('help')
 
 """Events"""
@@ -2809,7 +2810,6 @@ async def __tts(ctx, message : str, ephemeral : bool = True):
 
 if __name__ == "__main__":
     try:
-        load_dotenv()
         client.run(os.getenv("TOKEN"))
     except Exception as RunGeneralError:
         print("Error:",str(RunGeneralError))
