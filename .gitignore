@@ -1,3 +1,6 @@
+# Stockfish
+.stockfish_engine/
+
 # Python
 # Byte-compiled / optimized / DLL files
 __pycache__/
