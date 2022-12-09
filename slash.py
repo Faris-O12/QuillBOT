@@ -34,7 +34,7 @@ errorColor = discord.Color.red()
 os.chdir(r"G:\\QuillBOT")
 client.remove_command('help')
 
-# Events
+"""Events"""
 @client.event
 async def on_ready():
     "Runs when the bot is ready"
@@ -79,7 +79,7 @@ async def on_message(message):
 
 @client.tree.command(name="help", description="List of every command")
 @app_commands.describe(help_type="Type can be "+variables.HELP_COMMAND_TYPES)
-async def help_command(ctx, *, help_type : str):
+async def help_command(ctx, help_type : str):
     "Help command"
     if help_type.lower() == "info":
         await ctx.response.send_message(embed=discord.Embed(
@@ -167,7 +167,6 @@ async def help_command(ctx, *, help_type : str):
         ), ephemeral=True)
 
 """Help"""
-# Get the prefix of the bot
 @client.tree.command(name="prefix", description="Get the current prefix")
 async def prefix(ctx):
     "Return the current prefix"
@@ -176,39 +175,33 @@ async def prefix(ctx):
         ephemeral=True
     )
 
-# Gets the link for an attachment
 @client.tree.command(name="upload", description="Upload an image to recieve its url")
 @app_commands.describe(attachment="Attach an image to discord")
 async def upload(ctx, attachment: discord.Attachment):
     "Returns the link for an attachment"
     await ctx.response.send_message(f'Uploaded by **{ctx.user.name}** <{attachment.url}>')
 
-# Get user's ID
 @client.tree.command(name="myid", description="Get your unique user id")
 async def myid(ctx):
     "Get the ID of the user running the command"
     await ctx.response.send_message(ctx.user.id, ephemeral=True)
 
-# Get other's ID
 @client.tree.command(name="getid", description="Get the unique user id")
 @app_commands.describe(member="Insert any user in the server to get their id")
 async def getid(ctx, member : discord.User):
     "Get the ID of any user"
     await ctx.response.send_message(member.id, ephemeral=True)
 
-# Get channel id
 @client.tree.command(name="channelid", description="Get the unique channel id")
 async def channelid(ctx):
     "Get the ID of the channel the command is run on"
     await ctx.response.send_message(ctx.channel.id, ephemeral=True)
 
-# Get guild id
 @client.tree.command(name="serverid", description="Get the unique server id")
 async def serverid(ctx):
     "Get the ID of the server the command is run on"
     await ctx.response.send_message(ctx.guild.id, ephemeral=True)
 
-# Get the servers the bot is currently in
 @client.tree.command(name="servers", description="Return the number of servers the bot is in")
 async def servers(ctx):
     "Get the number of servers the bot is in"
@@ -217,14 +210,12 @@ async def servers(ctx):
         color=themeColor
     ), ephemeral=True)
 
-# Get a user's Profile picture
 @client.tree.command(name="pfp", description="Give an enlarged image of a user's profile picture")
 @app_commands.describe(user="User you want to get the profile picture of")
 async def pfp(ctx, user : discord.Member):
     "Get the Profile picture of any user"
     await ctx.response.send_message(user.avatar)
 
-# Stop the bot
 @client.tree.command(name="__stop", description="Owner command")
 async def __stop(ctx):
     "Stop the bot"
@@ -240,7 +231,6 @@ async def __stop(ctx):
             colour=errorColor
         ), ephemeral=True)
 
-# Restart the bot
 @client.tree.command(name="__restart", description="Owner command")
 async def __restart(ctx):
     "Restart the bot"
@@ -256,7 +246,6 @@ async def __restart(ctx):
             colour=errorColor
         ), ephemeral=True)
 
-# Get the bot ping
 @client.tree.command(name="latency", description="Returns the bot latency")
 @app_commands.describe(estimation="Whether the number should be estimated or not (Default true)")
 async def latency(ctx, estimation : str = "true"):
@@ -267,14 +256,12 @@ async def latency(ctx, estimation : str = "true"):
         await ctx.response.send_message(f"Bot latency (estimated): **{int(client.latency*1000)}ms**")
 
 """Randoms"""
-# Random int between a and b
 @client.tree.command(name="randint", description="Choose a random number between the two numbers that were provided")
 @app_commands.describe(number1="First number", number2="Second number")
 async def randint(ctx, number1 : int, number2 : int):
     "Return a random number between two numbers"
     await ctx.response.send_message(f"Random number from {str(number1)} to {str(number2)}: **{random.randint(number1, number2)}**")
 
-# Random option between a list
 @client.tree.command(name="randoption", description="Input in your choices (Seperate with commas)")
 @app_commands.describe(options="Your list of options")
 async def randoption(ctx, *, options : str):
@@ -282,7 +269,6 @@ async def randoption(ctx, *, options : str):
     await ctx.response.send_message(random.choice(options.split(",")))
 
 """Math"""
-# Add 'A' and 'B'
 @client.tree.command(name="add", description="Add the two provided numbers")
 @app_commands.describe(number1="First number", number2="Second number")
 async def add(ctx, number1: float, number2: float):
@@ -296,7 +282,6 @@ async def add(ctx, number1: float, number2: float):
     else:
         await ctx.response.send_message(f"**{number1} + {number2}**: __**{math.fsum([number1, number2])}**__")
 
-# Multiply 'A' and 'B'
 @client.tree.command(name="multiply", description="Multiply the two provided numbers")
 @app_commands.describe(number1="First number", number2="Second number")
 async def multiply(ctx, number1: float, number2: float):
@@ -310,7 +295,6 @@ async def multiply(ctx, number1: float, number2: float):
     else:
         await ctx.response.send_message(f"**{number1} × {number2}**: __**{number1 * number2}**__")
 
-# Divide 'A' and 'B'
 @client.tree.command(name="divide", description="Divide the two provided numbers")
 @app_commands.describe(number1="First number", number2="Second number")
 async def divide(ctx, number1: float, number2: float):
@@ -330,7 +314,6 @@ async def divide(ctx, number1: float, number2: float):
     else:
         await ctx.response.send_message(f"**{number1} ÷ {number2}**: __**{number1 / number2}**__")
 
-# Subtract 'A' from 'B'
 @client.tree.command(name="subtract", description="Subtract the two provided numbers")
 @app_commands.describe(number1="First number", number2="Second number")
 async def subtract(ctx, number1: float, number2: float):
@@ -344,7 +327,6 @@ async def subtract(ctx, number1: float, number2: float):
     else:
         await ctx.response.send_message(f"**{number1} - {number2}**: __**{number1 - number2}**__")
 
-# Find the remainder between 'A' and 'B'
 @client.tree.command(name="remainder", description="Find the remainder between the two numbers when divided")
 @app_commands.describe(number1="First number", number2="Second number")
 async def remainder(ctx, number1 : float, number2 : float):
@@ -358,7 +340,6 @@ async def remainder(ctx, number1 : float, number2 : float):
     else:
         await ctx.response.send_message(f"**{number1} ÷ {number2}** remainder: __**{number1 % number2}**__")
 
-# Get the square root of a number
 @client.tree.command(name="sqroot", description="Find the square root of any number")
 @app_commands.describe(number="Number you want to find the square root of")
 async def sqroot(ctx, number : float):
@@ -372,14 +353,12 @@ async def sqroot(ctx, number : float):
     else:
         await ctx.response.send_message(str(math.sqrt(number)))
 
-# Get the square of a number
 @client.tree.command(name="square", description="Square of the provided number")
 @app_commands.describe(number="Number you want to find the square of")
 async def square(ctx, number : float):
     "Find the square of a number"
     await ctx.response.send_message(str(number * number))
 
-# Get the cube root of a number
 @client.tree.command(name="curoot", description="Find the cube root of any number")
 @app_commands.describe(number="Number you want to find the cube root of")
 async def curoot(ctx, number : float):
@@ -393,21 +372,18 @@ async def curoot(ctx, number : float):
     else:
         await ctx.response.send_message(cbrt(number))
 
-# Get the cube of a number
 @client.tree.command(name="cube", description="Cube the provided number")
 @app_commands.describe(number="Number you want to find the cube of")
 async def cube(ctx, number : float):
     "Find the cube of a number"
     await ctx.response.send_message(str(number ** 3))
 
-# Get the pythagorean triplet for 'A' and 'B'
 @client.tree.command(name="hypotenuse", description="Use the pythagorean thereom to find the hypotenuse of a right triangle")
 @app_commands.describe(leg1="First leg", leg2="Second leg")
 async def hypotenuse(ctx, leg1 : float, leg2 : float):
     "Find the hypotenuse of a triangle"
     await ctx.response.send_message(f"{str(leg1)}² + {str(leg2)}² = x²\n{float(leg1) ** 2} + {float(leg2) ** 2} = x²\n{(float(leg1) ** 2) + (float(leg2) ** 2)} = x²\n__{math.sqrt((float(leg1) ** 2) + (float(leg2) ** 2))}__ = x")
 
-# Evaluate an equation
 @client.tree.command(name="evaluate", description="Evaluate the answer to your question")
 @app_commands.describe(question="Multiplication is * and division is /")
 async def evalute(ctx, *, question : str):
@@ -421,7 +397,6 @@ async def evalute(ctx, *, question : str):
     except Exception as EvaluateGeneralError:
         await ctx.response.send_message("__Error__: "+EvaluateGeneralError)
 
-# Exponenet a number with another number
 @client.tree.command(name="exponent", description="Multiply the base by the amount of exponent")
 @app_commands.describe(base="Base of the number", exponent="Exponent of the base")
 async def exponent(ctx, base : int, exponent : int):
@@ -437,7 +412,6 @@ async def exponent(ctx, base : int, exponent : int):
     else:
         await ctx.response.send_message(str(base ** exponent))
 
-# Get the root of a number with the specified root
 @client.tree.command(name="root", description="Root the number to the number")
 @app_commands.describe(number="Number you want to find the root of", root="Power of the root")
 async def root(ctx, number : int, root : int):
@@ -457,8 +431,8 @@ async def root(ctx, number : int, root : int):
     else:
         await ctx.response.send_message(str(number ** (1 / root)))
 
-# Get the value of any constant
-@client.tree.command(name="pi", description="Give you back the number pi")
+@client.tree.command(name="constant", description="Returns a mathematical constant")
+@app_commands.describe(name="Name of the constant (pi, e, tau)")
 async def constant(ctx, name : str):
     "Return the number of any constant"
     if name.lower() == "pi":
@@ -474,14 +448,12 @@ async def constant(ctx, name : str):
                 colour=errorColor
             ), ephemeral=True)
 
-# Get the percentage between numerator and denominator
 @client.tree.command(name="percentage", description="Find the percentage of any fraction")
 @app_commands.describe(numerator="Numerator of the fraction", denominator="Denominator of the fraction")
 async def percentage(ctx, numerator : int, denominator : int):
     "Find the percentage of a fraction"
     await ctx.response.send_message(f"Percentage of {str(numerator)} / {str(denominator)} : **{str((numerator / denominator) * 100)}%**")
 
-# Get the average value from a list
 @client.tree.command(name="average", description="Find the average value of the numbers")
 @app_commands.describe(numbers="Seperate the numbers with commas")
 async def average(ctx, numbers : str):
@@ -491,21 +463,18 @@ async def average(ctx, numbers : str):
     numlist = list(map(int, numbers))
     await ctx.response.send_message(sum(numlist) / len(numlist))
 
-# Get the increase percentange of any number
 @client.tree.command(name="increase", description="Find the increase percentage of any number")
 @app_commands.describe(number="The initial value", increase="The increase percentage")
 async def increase(ctx, number : int, increase : int):
     "Find increase percentage given the number and the increase"
     await ctx.response.send_message(number + (number * increase / 100))
 
-# Get the descrease percentage of any number
 @client.tree.command(name="decrease", description="Find the decrease percentage of any number")
 @app_commands.describe(number="The initial value", decrease="The decrease percentage")
 async def decrease(ctx, number : int, decrease : int):
     "Find the decrease percentage given the number and the decrease"
     await ctx.response.send_message(number - (number * decrease / 100))
 
-# Find the amount of diagonals a polygon has
 @client.tree.command(name="diagonals", description="Find the amount of diagonals a polygon has")
 @app_commands.describe(sides="The amount of sides the polygon has")
 async def diagonals(ctx, sides : int):
@@ -527,6 +496,7 @@ async def diagonals(ctx, sides : int):
             ), ephemeral=True)
 
 @client.tree.command(name="factorial", description="Find the factorial of any number")
+@app_commands.describe(number="The number you want to find the factorial of")
 async def factorial(ctx, number : int):
     "Find the factorial of any number"
     try:
@@ -539,7 +509,6 @@ async def factorial(ctx, number : int):
             ), ephemeral=True)
 
 """Question math"""
-# Ask an addition question
 @client.tree.command(name="question_add", description="Ask you an addition question")
 async def question_add(ctx):
     "Ask a random addition question"
@@ -547,7 +516,6 @@ async def question_add(ctx):
     num2 = random.randrange(10, 1000)
     await ctx.response.send_message(f"{str(num1)} + {str(num2)} = ||{str(num1 + num2)}||")
 
-# Ask a subtraction question
 @client.tree.command(name="question_subtract", description="Ask you a subtract question")
 async def question_subtract(ctx):
     "Ask a random subtraction question"
@@ -555,7 +523,6 @@ async def question_subtract(ctx):
     num2 = random.randrange(10, 1000)
     await ctx.response.send_message(f"{str(num1)} - {str(num2)} = ||{str(num1 - num2)}||")
 
-# Ask a multiplication question
 @client.tree.command(name="question_multiply", description="Ask you a multiplication question")
 async def question_multiply(ctx):
     "Ask a random multiplication question"
@@ -563,7 +530,6 @@ async def question_multiply(ctx):
     num2 = random.randrange(10, 1000)
     await ctx.response.send_message(f"{str(num1)} x {str(num2)} = ||{str(num1 * num2)}||")
 
-# Ask a division question
 @client.tree.command(name="question_divide", description="Ask you a division question")
 @commands.cooldown(1, 1, commands.BucketType.user)
 async def question_divide(ctx):
@@ -573,14 +539,12 @@ async def question_divide(ctx):
     await ctx.response.send_message(f"{str(num1)} / {str(num2)} = ||{str(num1 / num2)}||")
 
 """Time"""
-# Get the current UTC time
 @client.tree.command(name="utc", description="Give you the current UTC time")
 async def utc(ctx):
     "Return the current UTC time"
     await ctx.response.send_message("**UTC Time now: **"+str(str(str(datetime.datetime.utcnow()).split(".")[0]).split(" ")[1]).replace(":", " "))
 
 """Misc"""
-# Embed a message
 @client.tree.command(name="embed", description="Embed a message")
 @app_commands.describe(title="Title of the embed", text="Body of the embed")
 async def embed(ctx, title : str, text : str):
@@ -593,7 +557,6 @@ async def embed(ctx, title : str, text : str):
         color=themeColor
     ))
 
-# A fun 8Ball command
 @client.tree.command(name="8ball", description="Ask the magical 8 Ball any question to see its reponse")
 @app_commands.describe(question="Question that you will ask")
 async def Fortune(ctx,*,question : str):
@@ -622,14 +585,12 @@ async def Fortune(ctx,*,question : str):
     except Exception:
         await ctx.response.send_message('Oh no! My orb just broke! Meet me after I fix it.')
 
-# Sends the inputted message backwards
 @client.tree.command(name="backward", description="Returns the inputted text backwards")
 @app_commands.describe(text="Text that will be returned backwards")
 async def backward(ctx, *, text : str):
     "Return the inputted text backwards"
     await ctx.response.send_message(text[::-1])
 
-# Plays rock paper scissors with you
 @client.tree.command(name="rps", description="Play rock, papers, scissor against the bot")
 @app_commands.describe(choice="Your choice (Rock, Paper, Scissor)")
 async def rps(ctx, *, choice : str):
@@ -659,7 +620,6 @@ async def rps(ctx, *, choice : str):
         elif botChoice == "scissors":
             await ctx.response.send_message("Bot chose scissors! **You lose**")
 
-# Ceaser cipher by a given shift
 @client.tree.command(name="cipher", description="Use the ceaser cipher to encrypt the text")
 @app_commands.describe(shift="Shift of the text", text="Text that will be shifted")
 async def cipher(ctx, shift : int, *, text : str):
@@ -673,7 +633,6 @@ async def cipher(ctx, shift : int, *, text : str):
     await ctx.response.send_message(encrypted)
 
 """Code"""
-# Display your code in an embed
 @client.tree.command(name="code", description="Display your code in an embed")
 @app_commands.describe(filename="Name of the file", description="Description of the code", code="The code")
 async def code(ctx, filename : str, description : str, code : str):
@@ -694,8 +653,7 @@ async def code(ctx, filename : str, description : str, code : str):
             description="File name is not valid: Syntax for 'filename' `name.extension`",
             colour=errorColor
         ), ephemeral=True)
-        
-# Search a topic on wikipedia
+
 @client.tree.command(name="wikisearch", description="Seacrh wikipedia for a topic")
 @app_commands.describe(topic="The topic you want to search for")
 async def wikisearch(ctx, topic : str):
@@ -757,7 +715,6 @@ async def randomcolor(ctx):
     ))
 
 """Administrator"""
-# Kick a user
 @client.tree.command(name="kick", description="Kick any user from the server")
 @app_commands.describe(member="Member that will be kicked", reason="Reason on why the member is being kicked")
 async def kick(ctx, member : discord.Member, *, reason : str = None):
@@ -783,7 +740,6 @@ async def kick(ctx, member : discord.Member, *, reason : str = None):
             colour=errorColor
         ), ephemeral=True)
 
-# Ban a user
 @client.tree.command(name="ban", description="Ban any user from the server")
 @app_commands.describe(member="Member that is to be banned", reason="Reason on why the member is being banned")
 async def ban(ctx, member : discord.Member, *, reason : str = None):
@@ -810,7 +766,6 @@ async def ban(ctx, member : discord.Member, *, reason : str = None):
         ), ephemeral=True)
 
 """Science"""
-# The periodic table input is symbol
 @client.tree.command(name="elementsymbol", description="Input the symbol of any element to recieve its name")
 @app_commands.describe(element="Symbol of the element")
 async def elementsymbol(ctx, *, element : str):
@@ -1419,7 +1374,6 @@ async def elementsymbol(ctx, *, element : str):
             colour=errorColor
         ), ephemeral=True)
 
-# The periodic table to get the symbol
 @client.tree.command(name="elementnumber", description="Return the name of the element if given the atomic number")
 @app_commands.describe(number="The atomic number")
 async def elementnumber(ctx, *, number : str):
@@ -2028,7 +1982,6 @@ async def elementnumber(ctx, *, number : str):
             colour=errorColor
         ), ephemeral=True)
 
-# The periodic table to get the symbol
 @client.tree.command(name="elementname", description="Input the name of any element to recieve its symbol")
 @app_commands.describe(element="Name of the element (First letter must be capital)")
 async def elementname(ctx, *, element : str):
@@ -2637,14 +2590,12 @@ async def elementname(ctx, *, element : str):
             colour=errorColor
         ), ephemeral=True)
 
-# Get the periodic table
 @client.tree.command(name="periodic_table", description="Returns the periodic table")
 async def periodic_table(ctx):
     "Return an image of the periodic table"
     with open('assets/periodic_table.png', 'rb') as file:
         await ctx.response.send_message("**__Periodic table__**\n● Yellow: Alkali metals\n● Pink: Non metals\n● Dark orange: Alkali earth metals\n● Light blue: Halogens\n● Blue: Transition Metals\n● Purple: Noble gases\n● Black: Other metals\n● Red: Lanthanides\n● Grey: Metalloids\n● Green: Actinides", file=discord.File(file))
 
-# Get the types of cell organelles
 @client.tree.command(name="cell_organelles", description="Organelles are things that make up a cell")
 @app_commands.describe(organelle="Types: Cell wall, Cell membrane, Nucleas, Cytoplasm, Mitochondria, Endoplasmic reticulum, Ribosomes, Golgi appratus, Chloroplasts, Vacoules, Lysomes")
 async def cell_organelles(ctx, *, organelle : str):
@@ -2747,7 +2698,6 @@ async def bestmove(ctx, fen : str, depth : int = 15):
             ), ephemeral=True)
 
 """Owner commands"""
-# Set bot status
 @client.tree.command(name="__status", description="Owner command")
 @app_commands.describe(status="Status of the bot")
 async def __status(ctx, status : str):
@@ -2779,7 +2729,6 @@ async def __status(ctx, status : str):
             colour=errorColor
         ), ephemeral=True)
 
-# Personal command to open a link
 @client.tree.command(name="__open", description="Owner command")
 @app_commands.describe(link="Link to open")
 async def __open(ctx, *, link : str):
@@ -2804,7 +2753,6 @@ async def __open(ctx, *, link : str):
             colour=errorColor
         ), ephemeral=True)
 
-# Message a text into any channel
 @client.tree.command(name="__echo", description="Owner command")
 @app_commands.describe(channelid="ID of the channel you want to send the text to", text="What the bot will respond with")
 async def __echo(ctx, channelid : str, *, text : str):
@@ -2828,7 +2776,6 @@ async def __echo(ctx, channelid : str, *, text : str):
             colour = errorColor
         ), ephemeral=True)
 
-# Make the bot type for a specific time
 @client.tree.command(name="__type", description="Owner command")
 @app_commands.describe(time="Time")
 async def __type(ctx, time : int):
@@ -2844,7 +2791,6 @@ async def __type(ctx, time : int):
             colour = errorColor
         ), ephemeral=True)
 
-# Send a text to speech message
 @client.tree.command(name="__tts", description="Owner command")
 @app_commands.describe(message="Message")
 async def __tts(ctx, message : str, ephemeral : bool = True):

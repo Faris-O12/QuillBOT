@@ -157,7 +157,7 @@ ALL_COMMANDS=f"""
 **● Color**
 ```{COLOR_COMMANDS.replace("**", "")}```
 **● Code**
-```{CODE_COMMANDS.replace("**", "")}
+```{CODE_COMMANDS.replace("**", "")}```
 """
 
 SHORT_DESCRIPTION="Personal discord bot made by Faris#5260"
