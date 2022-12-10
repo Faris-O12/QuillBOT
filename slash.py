@@ -2807,7 +2807,7 @@ async def __open(ctx, *, link : str):
             webbrowser.open_new_tab(link)
         elif link.lower() == "ddp":
             await ctx.response.send_message("Opening discord developer portal", ephemeral=True)
-            webbrowser.open_new_tab(variables.DDPORTAL_LINK)
+            webbrowser.open_new_tab(os.getenv("DDPORTAL_LINK"))
         elif link.lower() == "repo":
             await ctx.response.send_message("Opening github repo", ephemeral=True)
             webbrowser.open_new_tab(variables.REPO_LINK)

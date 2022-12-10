@@ -6,7 +6,8 @@
 - A `.env` file
 - `TOKEN` variable holding your bot's token in the `.env` file
 - `QUILL_PATH` variable holding the path of the folder in the `.env` file
-- A `.stockfish_engine` folder with stockfish's engine
+- Configure the `STOCKFISH_PATH` variable in `variables.py` to stockfish's path
+- `DDPORTAL_LINK` variable in `.env` which contains the link to the discord developer portal link to your bot
 
 #### Libraries:
 - discord       : **pip install discord**
