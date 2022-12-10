@@ -3,7 +3,10 @@
 *Made using discord.py*
 
 #### Requirements to run:
-- A `.env` file in the folder with variable `TOKEN` with your bot's token and `QUILL_PATH` with the path of where the folder is at
+- A `.env` file
+- `TOKEN` variable holding your bot's token in the `.env` file
+- `QUILL_PATH` variable holding the path of the folder in the `.env` file
+- A `.stockfish_engine` folder with stockfish's engine
 
 #### Libraries:
 - discord       : **pip install discord**
