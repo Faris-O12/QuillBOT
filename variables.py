@@ -29,6 +29,10 @@
 PREFIX='/'
 OWNERID=804233465293570068
 
+COLOR_R=31
+COLOR_G=64
+COLOR_B=194
+
 REPO_LINK="https://github.com/Faris-O12/QuillBOT"
 DDPORTAL_LINK="https://discord.com/developers/applications/1022805394407555115/"
 

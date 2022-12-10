@@ -28,7 +28,11 @@ client = commands.Bot(
     owner_id=variables.OWNERID,
 )
 
-themeColor = discord.Color.from_rgb(31, 64, 194)
+themeColor = discord.Color.from_rgb(
+    variables.COLOR_R, 
+    variables.COLOR_G, 
+    variables.COLOR_B
+)
 errorColor = discord.Color.red()
 
 load_dotenv()
@@ -557,16 +561,59 @@ async def utc(ctx):
 
 """Misc"""
 @client.tree.command(name="embed", description="Embed a message")
-@app_commands.describe(title="Title of the embed", text="Body of the embed")
-async def embed(ctx, title : str, text : str):
-    "Make an embed"
-    text = text.replace(";", "\n")
-    await ctx.response.send_message(embed=discord.Embed(description=":white_check_mark: Embed sent", colour=themeColor), ephemeral = True)
-    await ctx.channel.send(embed=discord.Embed(
-        title="By "+ctx.user.name+", "+"__"+title+"__",
-        description=text,
-        color=themeColor
-    ))
+@app_commands.describe(
+    title="Title of the embed", 
+    text="Body of the embed",
+    footer="Footer of the embed",
+    image="An image if needed",
+    red="The red of RGB",
+    green="The green of RGB",
+    blue="The blue of RGB"
+)
+async def embed(
+    ctx, 
+    title : str, 
+    text : str, 
+    footer : str,
+    image : str = None,
+    header_img : str = None,
+    author_url : str = None,
+    red : int = variables.COLOR_R,
+    green : int = variables.COLOR_G, 
+    blue : int = variables.COLOR_B
+):
+    try:
+        "Make an embed"
+        text = text.replace(";", "\n")
+
+        embed = discord.Embed(
+            title=f"__{title}__",
+            description=text,
+            color=discord.Color.from_rgb(red, green, blue)
+        )
+        embed.set_author(
+            name=ctx.user.name, 
+            icon_url=str(ctx.user.avatar), 
+            url=author_url
+        )
+        embed.set_image(url=image)
+        embed.set_thumbnail(url=header_img)
+        embed.set_footer(text=footer)
+
+        await ctx.response.send_message(
+            embed=discord.Embed(
+                description=":white_check_mark: Embed sent", 
+                colour=themeColor
+            ), 
+            ephemeral = True
+        )
+        await ctx.channel.send(embed=embed)
+    except Exception as EmbedGeneralError:
+        await ctx.response.send_message(embed=discord.Embed(
+            title="**__Error__ ❌**",
+            description=str(EmbedGeneralError),
+            colour=errorColor
+        ), ephemeral=True)
 
 @client.tree.command(name="8ball", description="Ask the magical 8 Ball any question to see its reponse")
 @app_commands.describe(question="Question that you will ask")
@@ -643,7 +690,6 @@ async def cipher(ctx, shift : int, *, text : str):
     encrypted = text.translate(table)
     await ctx.response.send_message(encrypted)
 
-"""Code"""
 @client.tree.command(name="code", description="Display your code in an embed")
 @app_commands.describe(filename="Name of the file", description="Description of the code", code="The code")
 async def code(ctx, filename : str, description : str, code : str):
@@ -688,7 +734,6 @@ async def wikisearch(ctx, topic : str):
             colour=errorColor
         ), ephemeral=True)
 
-# Flip a coin
 @client.tree.command(name="coinflip", description="Flip a cion and have equal chance of getting heads or tails")
 async def coinflip(ctx):
     "Flip a coin"
@@ -696,8 +741,17 @@ async def coinflip(ctx):
 
 """Color"""
 @client.tree.command(name="rgb", description="Show you the color you made with RGB")
-@app_commands.describe(red="Red value", green="Green value", blue="Blue value")
-async def rgb(ctx, red : int, green : int, blue : int):
+@app_commands.describe(
+    red="Red value", 
+    green="Green value", 
+    blue="Blue value"
+)
+async def rgb(
+    ctx, 
+    red : int, 
+    green : int, 
+    blue : int
+):
     "Return an RGB color given the values"
     if red > 255 or green > 255 or blue > 255:
         await ctx.response.send_message(embed=discord.Embed(
@@ -720,9 +774,12 @@ async def rgb(ctx, red : int, green : int, blue : int):
 @client.tree.command(name="randomcolor", description="Return a random color")
 async def randomcolor(ctx):
     "Return a random color"
+    red = random.randint(1, 255)
+    green = random.randint(1, 255)
+    blue = random.randint(1, 255)
     await ctx.response.send_message(embed=discord.Embed(
-        description="Random color",
-        color=discord.Color.random()
+        description=f"{red}, {green}, {blue}",
+        color=discord.Color.from_rgb(red, green, blue)
     ))
 
 """Administrator"""
