@@ -699,27 +699,6 @@ async def cipher(ctx, shift : int, *, text : str):
     encrypted = text.translate(table)
     await ctx.response.send_message(encrypted)
 
-@client.tree.command(name="code", description="Display your code in an embed")
-@app_commands.describe(filename="Name of the file", description="Description of the code", code="The code")
-async def code(ctx, filename : str, description : str, code : str):
-    "Display a code in an embed"
-    code = code.replace(";", "\n")
-    description = description.replace(";", "\n")
-    fileextension = ""
-    try:
-        fileextension = filename.split(".")[1]
-        await ctx.response.send_message(embed=discord.Embed(
-            title=filename,
-            description=f"**Description**: {description}```{fileextension.lower()}\n{code}\n```",
-            color=themeColor
-        ))
-    except Exception as IndexError:
-        await ctx.response.send_message(embed=discord.Embed(
-            title="**__Error__ ❌**",
-            description="File name is not valid: Syntax for 'filename' `name.extension`",
-            colour=errorColor
-        ), ephemeral=True)
-
 @client.tree.command(name="wikisearch", description="Seacrh wikipedia for a topic")
 @app_commands.describe(topic="The topic you want to search for")
 async def wikisearch(ctx, topic : str):
@@ -2900,6 +2879,28 @@ async def pie_chart(
             colour=errorColor
         ), ephemeral=True)
 
+"""Code"""
+@client.tree.command(name="code", description="Display your code in an embed")
+@app_commands.describe(filename="Name of the file", description="Description of the code", code="The code")
+async def code(ctx, filename : str, description : str, code : str):
+    "Display a code in an embed"
+    code = code.replace(";", "\n")
+    description = description.replace(";", "\n")
+    fileextension = ""
+    try:
+        fileextension = filename.split(".")[1]
+        await ctx.response.send_message(embed=discord.Embed(
+            title=filename,
+            description=f"**Description**: {description}```{fileextension.lower()}\n{code}\n```",
+            color=themeColor
+        ))
+    except Exception as IndexError:
+        await ctx.response.send_message(embed=discord.Embed(
+            title="**__Error__ ❌**",
+            description="File name is not valid: Syntax for 'filename' `name.extension`",
+            colour=errorColor
+        ), ephemeral=True)
+
 """Owner commands"""
 @client.tree.command(name="__status", description="Owner command")
 @app_commands.describe(status="Status of the bot")
@@ -2998,7 +2999,14 @@ async def __type(ctx, time : int):
 @app_commands.describe(message="Message")
 async def __tts(ctx, message : str, ephemeral : bool = True):
     "Send a text to speech message"
-    await ctx.response.send_message(message, tts=True, ephemeral=ephemeral)
+    if ctx.user.id == client.owner_id:
+        await ctx.response.send_message(message, tts=True, ephemeral=ephemeral)
+    else:
+        await ctx.response.send_message(embed = discord.Embed(
+            title="__Error__ ❌",
+            description="You do now have permissions to run this command",
+            colour = errorColor
+        ), ephemeral=True)
 
 if __name__ == "__main__":
     try:
