@@ -14,18 +14,18 @@ try:
     import webbrowser
     import wikipediaapi
     import asyncio
-    from numpy import cbrt
+    import numpy
     from stockfish import Stockfish
     from dotenv import load_dotenv
 except ImportError as ImportImportError:
-    print("Import Error: "+str(ImportImportError))
+    print(f"Import Error: {ImportImportError}")
 
 client = commands.Bot(
     command_prefix=variables.PREFIX,
     description=variables.SHORT_DESCRIPTION,
     case_insensitive=True,
     intents=discord.Intents.all(),
-    owner_id=variables.OWNERID,
+    owner_id=variables.OWNERID
 )
 
 themeColor = discord.Color.from_rgb(
@@ -375,7 +375,7 @@ async def curoot(ctx, number : float):
             colour=errorColor
         ), ephemeral=True)
     else:
-        await ctx.response.send_message(cbrt(number))
+        await ctx.response.send_message(numpy.cbrt(number))
 
 @client.tree.command(name="cube", description="Cube the provided number")
 @app_commands.describe(number="Number you want to find the cube of")

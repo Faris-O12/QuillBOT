@@ -2,21 +2,24 @@
 
 *Made using discord.py*
 
-#### Requirements to run:
+### **Downloads:**
+*[Download stockfish's engine](https://stockfishchess.org/download/)*
+
+### **Requirements to run:**
 - A `.env` file
 - `TOKEN` variable holding your bot's token in the `.env` file
 - `QUILL_PATH` variable holding the path of the folder in the `.env` file
 - Configure the `STOCKFISH_PATH` variable in `variables.py` to stockfish's path
 - `DDPORTAL_LINK` variable in `.env` which contains the link to the discord developer portal link to your bot
 
-#### Libraries:
-- discord       : **pip install discord**
-- wikipediaapi  : **pip install wikipedia-api**
-- stockfish     : **pip install stockfish**
-- dotenv        : **pip install python-dotenv**
-- numpy         : **pip install numpy**
+### **Libraries:**
+- [discord](https://discordpy.readthedocs.io) : **pip install discord**
+- [wikipediaapi](https://wikipedia-api.readthedocs.io/en/latest/README.html) : **pip install wikipedia-api**
+- [stockfish](https://pypi.org/project/stockfish/) : **pip install stockfish**
+- [dotenv](https://pypi.org/project/python-dotenv/) : **pip install python-dotenv**
+- [numpy](https://numpy.org/doc/) : **pip install numpy**
 
-## <u>Listeners</u>
+## **<u>Listeners</u>**
 
 - On ready (on_ready)
     - Runs when the bot starts running.
@@ -28,7 +31,7 @@
     - Runs when a user messages in a server (or DM) the bot is in.
     - Checks whether the bot was pinged to give a short description about it.
 
-## <u>Help command</u>
+## **<u>Help command</u>**
 
 A command to give you the list of every command in the bot.
 
