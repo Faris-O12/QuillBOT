@@ -2865,6 +2865,41 @@ async def bar_graph(
             colour=errorColor
         ), ephemeral=True)
 
+@client.tree.command(name="pie_chart", description="Create a pie chart with the entered data")
+@app_commands.describe(
+    name="Title of the chart",
+    values="Values of the pie chart",
+    labels="Labels of the values"
+)
+async def pie_chart(
+    ctx,
+    name : str,
+    values : str,
+    labels : str
+):
+    try:
+        values = values.replace(" ", "")
+
+        plt.pie(list(map(int, values.split(","))), labels=labels.split(","), autopct='%1.1f%%')
+        plt.title(name)
+
+        plt.savefig("mpl_plots/temp_pie.png")
+        await ctx.response.send_message(file=discord.File("mpl_plots/temp_pie.png"))
+        plt.close()
+        os.remove("mpl_plots/temp_pie.png")
+    except ValueError:
+        await ctx.response.send_message(embed=discord.Embed(
+            title="__Error__ ❌",
+            description="Values cannot be decimal or fractional",
+            colour=errorColor
+        ), ephemeral=True)
+    except Exception as piechartGeneralError:
+        await ctx.response.send_message(embed=discord.Embed(
+            title="__Error__ ❌",
+            description=piechartGeneralError,
+            colour=errorColor
+        ), ephemeral=True)
+
 """Owner commands"""
 @client.tree.command(name="__status", description="Owner command")
 @app_commands.describe(status="Status of the bot")

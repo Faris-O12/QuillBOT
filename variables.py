@@ -141,6 +141,7 @@ CODE_COMMANDS="""
 DATA_COMMANDS="""
 **1. line_graph** name vertical_name horizontal_name vertical_objects horizontal_objects : Create a line graph with your inputted data
 **2. bar_graph** name vertical_name horizontal_name vertical_objects horizontal_objects : Create a bar graph with your inputter data
+**3. pie_chart** name values labels : Create a pie chart with the inputter values and the corrosponding labels
 """
 ALL_COMMANDS=f"""
 **● Info**
