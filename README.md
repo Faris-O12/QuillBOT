@@ -18,6 +18,7 @@
 - [stockfish](https://pypi.org/project/stockfish/) : **pip install stockfish**
 - [dotenv](https://pypi.org/project/python-dotenv/) : **pip install python-dotenv**
 - [numpy](https://numpy.org/doc/) : **pip install numpy**
+- [matplotlib](https://matplotlib.org/stable/index.html) : **pip install matplotlib**
 
 ## **<u>Listeners</u>**
 
@@ -51,6 +52,7 @@ You can run `/help` along with a type, the type can be of the following:
 - `Color:` Commands which returns color as an output
 - `Chess:` Commands that involve stockfish analysing a chess position
 - `Code:` Commands that involve programming or coding
+- `Data:` Commands that allow you to input data to create graphs
 - `Total:` Gives the total amount of commands
 
 Depending on which type is chosen, the output would give you command of the specified catgory. If the input is not in these categories, it would return an embed with every command.

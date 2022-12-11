@@ -15,6 +15,7 @@ try:
     import wikipediaapi
     import asyncio
     import numpy
+    import matplotlib.pyplot as plt
     from stockfish import Stockfish
     from dotenv import load_dotenv
 except ImportError as ImportImportError:
@@ -156,6 +157,12 @@ async def help_command(ctx, help_type : str):
         await ctx.response.send_message(embed=discord.Embed(
             title="__Code__",
             description=variables.CODE_COMMANDS,
+            color=themeColor
+        ), ephemeral=True)
+    elif help_type.lower() == "data":
+        await ctx.response.send_message(embed=discord.Embed(
+            title="__Data__",
+            description=variables.DATA_COMMANDS,
             color=themeColor
         ), ephemeral=True)
     elif help_type.lower() == "total":
@@ -441,15 +448,17 @@ async def root(ctx, number : int, root : int):
 async def constant(ctx, name : str):
     "Return the number of any constant"
     if name.lower() == "pi":
-        await ctx.response.send_message(math.pi)
+        await ctx.response.send_message(numpy.pi)
     elif name.lower() == "e":
-        await ctx.response.send_message(math.e)
+        await ctx.response.send_message(numpy.e)
     elif name.lower() == "tau":
         await ctx.response.send_message(math.tau)
+    elif name.lower() == "euler gamma":
+        await ctx.response.send_message(numpy.euler_gamma)
     else:
         await ctx.response.send_message(embed=discord.Embed(
                 title="**__Error__ ❌**",
-                description="Mathematical constants: pi, e, tau",
+                description="Mathematical constants: pi, e, tau, euler gamma",
                 colour=errorColor
             ), ephemeral=True)
 
@@ -2764,6 +2773,97 @@ async def bestmove(ctx, fen : str, depth : int = 15):
                 description="FEN is Invalid",
                 colour=errorColor
             ), ephemeral=True)
+
+"""Data"""
+@client.tree.command(name="line_graph", description="Create a line graph with your data")
+@app_commands.describe(
+    name="The title for the chart",
+    vertical_name="The name of the objects in the Y axis",
+    horizontal_name="The name of the objects in the X axis",
+    vertical_objects="The objects in the Y axis",
+    horizontal_objects="The objects in the X axis"
+)
+async def line_graph(
+    ctx, 
+    name : str,
+    vertical_name : str, 
+    horizontal_name : str, 
+    vertical_objects : str, 
+    horizontal_objects : str
+):
+    try:
+        vertical_objects = vertical_objects.replace(" ", "")
+        horizontal_objects = horizontal_objects.replace(" ", "")
+        plt.plot(
+            list(map(int, horizontal_objects.split(","))),
+            list(map(int, vertical_objects.split(",")))
+        )
+
+        plt.title(name)
+        plt.xlabel(horizontal_name)
+        plt.ylabel(vertical_name)
+
+        plt.savefig("mpl_plots/temp_plot.png")
+        await ctx.response.send_message(file=discord.File("mpl_plots/temp_plot.png"))
+        plt.close()
+        os.remove("mpl_plots/temp_plot.png")
+    except ValueError:
+        await ctx.response.send_message(embed=discord.Embed(
+            title="__Error__ ❌",
+            description="Values cannot be decimal or fractional",
+            colour=errorColor
+        ), ephemeral=True)
+    except Exception as linegraphGeneralError:
+       await ctx.response.send_message(embed=discord.Embed(
+            title="__Error__ ❌",
+            description=linegraphGeneralError,
+            colour=errorColor
+        ), ephemeral=True)
+
+@client.tree.command(name="bar_graph", description="Create a bar graph with the entered data")
+@app_commands.describe(
+    name="Title of the bar graph",
+    vertical_name="Name of the Y axis",
+    horizontal_name="Name of the X axis",
+    vertical_objects="Objects in Y axis",
+    horizontal_objects="Objects in X axis"
+)
+async def bar_graph(
+    ctx, 
+    name : str,
+    vertical_name : str,
+    horizontal_name : str,
+    vertical_objects : str,
+    horizontal_objects : str
+):
+    try:
+        vertical_objects = vertical_objects.replace(" ", "")
+        horizontal_objects = horizontal_objects.replace(" ", "")
+        plt.bar(
+            list(map(int, horizontal_objects.split(","))),
+            list(map(int, vertical_objects.split(",")))
+        )
+
+        plt.title(name)
+        plt.xlabel(horizontal_name)
+        plt.ylabel(vertical_name)
+
+        plt.savefig("mpl_plots/temp_bar.png")
+        await ctx.response.send_message(file=discord.File("mpl_plots/temp_bar.png"))
+        plt.close()
+        os.remove("mpl_plots/temp_bar.png")
+    except ValueError:
+        await ctx.response.send_message(embed=discord.Embed(
+            title="__Error__ ❌",
+            description="Values cannot be decimal or fractional",
+            colour=errorColor
+        ), ephemeral=True)
+    except Exception as bargraphGeneralError:
+        await ctx.response.send_message(embed=discord.Embed(
+            title="__Error__ ❌",
+            description=bargraphGeneralError,
+            colour=errorColor
+        ), ephemeral=True)
 
 """Owner commands"""
 @client.tree.command(name="__status", description="Owner command")

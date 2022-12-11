@@ -19,10 +19,11 @@
  17. CHESS_COMMANDS
  18. COLOR_COMMANDS
  19. CODE_COMMANDS
- 20. ALL_COMMANDS
- 21. SHORT_DESCRIPTION
- 22. DESCRIPTION
- 23. STOCKFISH_PATH
+ 20. DATA_COMMANDS
+ 21. ALL_COMMANDS
+ 22. SHORT_DESCRIPTION
+ 23. DESCRIPTION
+ 24. STOCKFISH_PATH
 """
 
 PREFIX='/'
@@ -49,6 +50,7 @@ HELP_COMMAND_TYPES="""
 - Chess
 - Admin
 - Code
+- Data
 - Total
 - All
 """
@@ -135,6 +137,10 @@ COLOR_COMMANDS="""
 """
 CODE_COMMANDS="""
 **1. code** filename description code : Display your code in an embed
+"""
+DATA_COMMANDS="""
+**1. line_graph** name vertical_name horizontal_name vertical_objects horizontal_objects : Create a line graph with your inputted data
+**2. bar_graph** name vertical_name horizontal_name vertical_objects horizontal_objects : Create a bar graph with your inputter data
 """
 ALL_COMMANDS=f"""
 **● Info**
