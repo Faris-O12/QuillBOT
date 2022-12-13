@@ -401,13 +401,31 @@ async def hypotenuse(ctx, leg1 : float, leg2 : float):
 async def evalute(ctx, *, question : str):
     "Evaluate an equation"
     try:
+        org_question = question
+
         question = question.replace(",","")
+        question = question.replace("pi", str(numpy.pi))
+        question = question.replace("e", str(numpy.e))
+        question = question.replace("tau", str(math.tau))
+        question = question.replace("x", "*")
+        question = question.replace("^", "**")
+
         answer = eval(question)
-        await ctx.response.send_message(f"{question} = **__{answer}__**")
+        await ctx.response.send_message(f"{org_question} = __{answer}__")
     except ZeroDivisionError:
-        await ctx.response.send_message("Cannot divide with 0")
+        await ctx.response.send_message(embed=discord.Embed(
+            title="__Error__ ❌",
+            description="Cannot divide a number with 0",
+            colour=errorColor
+        ), ephemeral=True)
+    except SyntaxError:
+        await ctx.response.send_message(embed=discord.Embed(
+            title="__Error__ ❌",
+            description="You cannot put any letters: Allowed characters are ** (or '^'), /, * (or 'x'), +, -",
+            colour=errorColor
+        ), ephemeral=True)
     except Exception as EvaluateGeneralError:
-        await ctx.response.send_message("__Error__: "+EvaluateGeneralError)
+        await ctx.response.send_message("__Error__: "+str(EvaluateGeneralError))
 
 @client.tree.command(name="exponent", description="Multiply the base by the amount of exponent")
 @app_commands.describe(base="Base of the number", exponent="Exponent of the base")
@@ -445,7 +463,7 @@ async def root(ctx, number : int, root : int):
 
 @client.tree.command(name="constant", description="Returns a mathematical constant")
 @app_commands.describe(name="Name of the constant (pi, e, tau)")
-async def constant(ctx, name : str):
+async def constant(ctx, name : str = ""):
     "Return the number of any constant"
     if name.lower() == "pi":
         await ctx.response.send_message(numpy.pi)
@@ -457,10 +475,10 @@ async def constant(ctx, name : str):
         await ctx.response.send_message(numpy.euler_gamma)
     else:
         await ctx.response.send_message(embed=discord.Embed(
-                title="**__Error__ ❌**",
-                description="Mathematical constants: pi, e, tau, euler gamma",
-                colour=errorColor
-            ), ephemeral=True)
+            title="__Mathematical constants__",
+            description=f"- pi: {numpy.pi}\n- e: {numpy.e}\n- tau: {math.tau}\n- euler gamma: {numpy.euler_gamma}",
+            color=themeColor
+        ))
 
 @client.tree.command(name="percentage", description="Find the percentage of any fraction")
 @app_commands.describe(numerator="Numerator of the fraction", denominator="Denominator of the fraction")
@@ -2781,6 +2799,7 @@ async def line_graph(
         plt.title(name)
         plt.xlabel(horizontal_name)
         plt.ylabel(vertical_name)
+        plt.grid(True)
 
         plt.savefig("mpl_plots/temp_plot.png")
         await ctx.response.send_message(file=discord.File("mpl_plots/temp_plot.png"))
@@ -2789,7 +2808,7 @@ async def line_graph(
     except ValueError:
         await ctx.response.send_message(embed=discord.Embed(
             title="__Error__ ❌",
-            description="Values cannot be decimal or fractional",
+            description="Values cannot be decimal or fractional and everything must be a number, seperated with commas",
             colour=errorColor
         ), ephemeral=True)
     except Exception as linegraphGeneralError:
@@ -2826,7 +2845,8 @@ async def bar_graph(
         plt.title(name)
         plt.xlabel(horizontal_name)
         plt.ylabel(vertical_name)
-
+        plt.grid(True)
+        
         plt.savefig("mpl_plots/temp_bar.png")
         await ctx.response.send_message(file=discord.File("mpl_plots/temp_bar.png"))
         plt.close()
@@ -2834,7 +2854,7 @@ async def bar_graph(
     except ValueError:
         await ctx.response.send_message(embed=discord.Embed(
             title="__Error__ ❌",
-            description="Values cannot be decimal or fractional",
+            description="Values cannot be decimal or fractional and everything must be a number, seperated with commas",
             colour=errorColor
         ), ephemeral=True)
     except Exception as bargraphGeneralError:
@@ -2869,7 +2889,7 @@ async def pie_chart(
     except ValueError:
         await ctx.response.send_message(embed=discord.Embed(
             title="__Error__ ❌",
-            description="Values cannot be decimal or fractional",
+            description="Values cannot be decimal or fractional and everything must be a number (Except labels), seperated with commas",
             colour=errorColor
         ), ephemeral=True)
     except Exception as piechartGeneralError:
@@ -2884,13 +2904,14 @@ async def pie_chart(
 @app_commands.describe(filename="Name of the file", description="Description of the code", code="The code")
 async def code(ctx, filename : str, description : str, code : str):
     "Display a code in an embed"
+    semi_amount = code.count(";")
     code = code.replace(";", "\n")
     description = description.replace(";", "\n")
     fileextension = ""
     try:
         fileextension = filename.split(".")[1]
         await ctx.response.send_message(embed=discord.Embed(
-            title=filename,
+            title=f"{filename} ({semi_amount} lines long)",
             description=f"**Description**: {description}```{fileextension.lower()}\n{code}\n```",
             color=themeColor
         ))
