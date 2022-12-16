@@ -1,0 +1,6 @@
+discord==2.0.0
+wikipedia-api
+stockfish
+python-dotenv
+matplotlib
+numpy

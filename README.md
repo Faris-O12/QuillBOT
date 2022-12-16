@@ -13,6 +13,7 @@
 - `DDPORTAL_LINK` variable in `.env` which contains the link to the discord developer portal link to your bot
 
 ### **Libraries:**
+*Note: You can run `pip install -r requirements.txt` to install all the requirements*
 - [discord](https://discordpy.readthedocs.io) : **pip install discord**
 - [wikipediaapi](https://wikipedia-api.readthedocs.io/en/latest/README.html) : **pip install wikipedia-api**
 - [stockfish](https://pypi.org/project/stockfish/) : **pip install stockfish**

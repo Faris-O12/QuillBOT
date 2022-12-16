@@ -24,6 +24,7 @@
  22. SHORT_DESCRIPTION
  23. DESCRIPTION
  24. STOCKFISH_PATH
+ 25. BOT_NAME
 """
 
 PREFIX='/'
@@ -190,3 +191,4 @@ Usage: /help <type>
 """
 
 STOCKFISH_PATH="G:\\QuillBOT\\stockfish_engine\\stockfish_15_x64_popcnt.exe"
+BOT_NAME="Quill#7764"

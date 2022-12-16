@@ -402,6 +402,11 @@ async def evalute(ctx, *, question : str):
     "Evaluate an equation"
     try:
         org_question = question
+        org_question = org_question.replace("pi", "π")
+        org_question = org_question.replace("tau", "τ")
+        org_question = org_question.replace("/", "÷")
+        org_question = org_question.replace("**", "^")
+        org_question = org_question.replace("*", "x")
 
         question = question.replace(",","")
         question = question.replace("pi", str(numpy.pi))
@@ -410,8 +415,7 @@ async def evalute(ctx, *, question : str):
         question = question.replace("x", "*")
         question = question.replace("^", "**")
 
-        answer = eval(question)
-        await ctx.response.send_message(f"{org_question} = __{answer}__")
+        await ctx.response.send_message(f"```{org_question}\n= {eval(question)}```")
     except ZeroDivisionError:
         await ctx.response.send_message(embed=discord.Embed(
             title="__Error__ ❌",
@@ -2796,7 +2800,7 @@ async def line_graph(
             list(map(int, vertical_objects.split(",")))
         )
 
-        plt.title(name)
+        plt.title(name + "\nMade using "+variables.BOT_NAME)
         plt.xlabel(horizontal_name)
         plt.ylabel(vertical_name)
         plt.grid(True)
@@ -2842,7 +2846,7 @@ async def bar_graph(
             list(map(int, vertical_objects.split(",")))
         )
 
-        plt.title(name)
+        plt.title(name + "\nMade using "+variables.BOT_NAME)
         plt.xlabel(horizontal_name)
         plt.ylabel(vertical_name)
         plt.grid(True)
@@ -2880,7 +2884,7 @@ async def pie_chart(
         values = values.replace(" ", "")
 
         plt.pie(list(map(int, values.split(","))), labels=labels.split(","), autopct='%1.1f%%')
-        plt.title(name)
+        plt.title(name + "\nMade using "+variables.BOT_NAME)
 
         plt.savefig("mpl_plots/temp_pie.png")
         await ctx.response.send_message(file=discord.File("mpl_plots/temp_pie.png"))
