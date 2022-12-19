@@ -13,7 +13,6 @@ try:
     import string
     import webbrowser
     import wikipediaapi
-    import asyncio
     import numpy
     import matplotlib.pyplot as plt
     from stockfish import Stockfish
@@ -179,6 +178,13 @@ async def help_command(ctx, help_type : str):
         ), ephemeral=True)
 
 """Help"""
+@client.tree.command(name="invite", description="Invite the bot to your server")
+async def invite(ctx):
+    await ctx.response.send_message(embed=discord.Embed(
+        description=f"[Add to server]({variables.INVITE_LINK})",
+        color=themeColor
+    ), ephemeral=True)
+
 @client.tree.command(name="prefix", description="Get the current prefix")
 async def prefix(ctx):
     "Return the current prefix"
@@ -2674,84 +2680,6 @@ async def periodic_table(ctx):
     with open('assets/periodic_table.png', 'rb') as file:
         await ctx.response.send_message("**__Periodic table__**\n● Yellow: Alkali metals\n● Pink: Non metals\n● Dark orange: Alkali earth metals\n● Light blue: Halogens\n● Blue: Transition Metals\n● Purple: Noble gases\n● Black: Other metals\n● Red: Lanthanides\n● Grey: Metalloids\n● Green: Actinides", file=discord.File(file))
 
-@client.tree.command(name="cell_organelles", description="Organelles are things that make up a cell")
-@app_commands.describe(organelle="Types: Cell wall, Cell membrane, Nucleas, Cytoplasm, Mitochondria, Endoplasmic reticulum, Ribosomes, Golgi appratus, Chloroplasts, Vacoules, Lysomes")
-async def cell_organelles(ctx, *, organelle : str):
-    "Return information of a cell organelle"
-    organelle = organelle.lower()
-    if organelle == "cell wall":
-        await ctx.response.send_message(embed=discord.Embed(
-            title="__Cell wall__",
-            description="```A cell wall is defined as a rigid, external layer that is specifically designed to provide structural support and rigidity. It also keeps the interior components of the cell intact and safe from the external environment. It is present only within plant cells.```",
-            color=themeColor
-        ))
-    elif organelle == "cell membrane":
-        await ctx.response.send_message(embed=discord.Embed(
-            title="__Cell membrane__",
-            description="```The cell membrane, also called the plasma membrane, is found in all cells and separates the interior of the cell from the outside environment. The cell membrane consists of a lipid bilayer that is semipermeable. The cell membrane regulates the transport of materials entering and exiting the cell.```",
-            color=themeColor
-        ))
-    elif organelle == "nucleas":
-        await ctx.response.send_message(embed=discord.Embed(
-            title="__Nucleas__",
-            description="```A nucleus, as related to genomics, is the membrane-enclosed organelle within a cell that contains the chromosomes. An array of holes, or pores, in the nuclear membrane allows for the selective passage of certain molecules (such as proteins and nucleic acids) into and out of the nucleus.```",
-            color=themeColor
-        ))
-    elif organelle == "cytoplasm":
-        await ctx.response.send_message(embed=discord.Embed(
-            title="__Cytoplasm__",
-            description="```Cytoplasm is the gelatinous liquid that fills the inside of a cell. It is composed of water, salts, and various organic molecules. Some intracellular organelles, such the nucleus and mitochondria, are enclosed by membranes that separate them from the cytoplasm.```",
-            color=themeColor
-        ))
-    elif organelle == "mitochondria":
-        await ctx.response.send_message(embed=discord.Embed(
-            title="__Mitochondria__",
-            description="```Mitochondria are membrane-bound cell organelles (mitochondrion, singular) that generate most of the chemical energy needed to power the cell's biochemical reactions. Chemical energy produced by the mitochondria is stored in a small molecule called adenosine triphosphate (ATP).```",
-            color=themeColor
-        ))
-    elif organelle == "endoplasmic reticulum":
-        await ctx.response.send_message(embed=discord.Embed(
-            title="__Endplasmic reticulam__",
-            description="```The endoplasmic reticulum (ER) is a continuous membrane system that forms a series of flattened sacs within the cytoplasm of eukaryotic cells. All eukaryotic cells contain an ER. In animal cells, the ER usually constitutes more than half of the membranous content of the cell.```",
-            color=themeColor
-        ))
-    elif organelle == "ribosomes":
-        await ctx.response.send_message(embed=discord.Embed(
-            title="__Ribosomes__",
-            description="```A ribosome is an intercellular structure made of both RNA and protein, and it is the site of protein synthesis in the cell. The ribosome reads the messenger RNA (mRNA) sequence and translates that genetic code into a specified string of amino acids, which grow into long chains that fold to form proteins.```",
-            color=themeColor
-        ))
-    elif organelle == "golgi apparatus":
-        await ctx.response.send_message(embed=discord.Embed(
-            title="__Golgi apparatus__",
-            description="```A Golgi body, also known as a Golgi apparatus, is a cell organelle that helps process and package proteins and lipid molecules, especially proteins destined to be exported from the cell. Named after its discoverer, Camillo Golgi, the Golgi body appears as a series of stacked membranes.```",
-            color=themeColor
-        ))
-    elif organelle == "chloroplasts":
-        await ctx.response.send_message(embed=discord.Embed(
-            title="__Chloroplasts__",
-            description="```A chloroplast is an organelle within the cells of plants and certain algae that is the site of photosynthesis, which is the process by which energy from the Sun is converted into chemical energy for growth.```",
-            color=themeColor
-        ))
-    elif organelle == "vacoules":
-        await ctx.response.send_message(embed=discord.Embed(
-            title="__Vacoules__",
-            description="```A vacuole is a membrane-bound cell organelle. In animal cells, vacuoles are generally small and help sequester waste products. In plant cells, vacuoles help maintain water balance. Sometimes a single vacuole can take up most of the interior space of the plant cell```",
-            color=themeColor
-        ))
-    elif organelle == "lysomes":
-        await ctx.response.send_message(embed=discord.Embed(
-            title="__Lysomes__",
-            description="```A lysosome is a membrane-bound cell organelle that contains digestive enzymes. Lysosomes are involved with various cell processes. They break down excess or worn-out cell parts. They may be used to destroy invading viruses and bacteria.```",
-            color=themeColor
-        ))
-    else:
-        await ctx.response.send_message(embed=discord.Embed(
-            title="__Error: ❌",
-            description=f"```Cell organelle '{organelle.capitalize()}' does not exist\nTypes: Cell wall, Cell membrane, Nucleas, Cytoplasm, Mitochondria, Endoplasmic reticulum, Ribosomes, Golgi appratus, Chloroplasts, Vacoules, Lysomes```",
-            color=errorColor
-        ), ephemeral=True)
-
 """Chess"""
 @client.tree.command(name="bestmove", description="Find the best move in any position given its FEN")
 @app_commands.describe(fen="The FEN of the position", depth="Depth of stockfish (Maximum 15)")
@@ -2902,6 +2830,24 @@ async def pie_chart(
             description=piechartGeneralError,
             colour=errorColor
         ), ephemeral=True)
+
+@client.tree.command(name="create_list", description="Create a list of numbers between 2 numbers with a step")
+@app_commands.describe(
+    start="The number that it starts with", 
+    stop="The number that it loops with the step until it gets to", 
+    step="The number that adds to the first number until it gets to the last number"
+)
+async def create_list(ctx, start : int, stop : int, step : int):
+    stop = stop + 1
+    numlist = str(numpy.arange(start, stop, step))
+    numlist = numlist.replace("[", "")
+    numlist = numlist.replace("]", "")
+    
+    await ctx.response.send_message(numlist)
+
+@client.tree.command(name="replace_text", description="Replace a symbol from the text")
+async def replace_text(ctx, text : str, symbol : str, change : str):
+    await ctx.response.send_message(text.replace(symbol, change))
 
 """Code"""
 @client.tree.command(name="code", description="Display your code in an embed")

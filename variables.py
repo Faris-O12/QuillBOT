@@ -25,6 +25,7 @@
  23. DESCRIPTION
  24. STOCKFISH_PATH
  25. BOT_NAME
+ 26. INVITE_LINK
 """
 
 PREFIX='/'
@@ -35,6 +36,7 @@ COLOR_G=64
 COLOR_B=194
 
 REPO_LINK="https://github.com/Faris-O12/QuillBOT"
+INVITE_LINK="https://discord.com/api/oauth2/authorize?client_id=1022805394407555115&permissions=8&scope=applications.commands%20bot"
 
 TOTAL_PRIVATE_COMMANDS_SLASH=7
 TOTAL_COMMANDS_SLASH=0
@@ -58,6 +60,7 @@ HELP_COMMAND_TYPES="""
 INFO_COMMANDS="""
 **1. prefix** : Displays the current prefix
 **2. latency** estimation(Default: True) : Get the ping latency of the client. Estimation must be either 'True' or 'False'
+**3. invite** : Send an invite link
 """
 UTILITY_COMMANDS="""
 **1. upload** file : Upload a file to chat
@@ -113,17 +116,11 @@ MISC_COMMANDS="""
 **7. wikisearch** link (or title) : Sends an embed about the summary of the topic
 **8. coinflip** : Have a half chance of getting heads or tails
 """
-MCSERVER_COMMANDS="""
-**1. server_start** server : Insert the name of the server for the bot to start the minecraft server
-**2. server_playerlist** server : Get the amount of players in a server
-**3. server_status** server : Tell the status of the server (eg. online, offline, loading etc.)
-"""
 SCIENCE_COMMANDS="""
 **1. elementsymbol** symbol : Returns the name of the element if given its symbol
 **2. elementname** name : Returns the symbol of the element if given its name
 **3. elementnumber** number : Returns the name of the element given its atomic number
 **4. periodic_table** : Gives you the periodic table
-**5. cell_organelles** name : A small paragraph about the specified organelle
 """
 ADMIN_COMMANDS="""
 **1. kick** user : Kicks the user from the current server
@@ -144,6 +141,8 @@ DATA_COMMANDS="""
 **1. line_graph** name vertical_name horizontal_name vertical_objects horizontal_objects : Create a line graph with your inputted data
 **2. bar_graph** name vertical_name horizontal_name vertical_objects horizontal_objects : Create a bar graph with your inputter data
 **3. pie_chart** name values labels : Create a pie chart with the inputter values and the corrosponding labels
+**4. create_list** start stop step : Create a list of numbers between start and stop with a step
+**5. replace_text** text symbol change: Change the 'symbol' in 'text' to 'change'
 """
 ALL_COMMANDS=f"""
 **● Info**
