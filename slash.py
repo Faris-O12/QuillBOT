@@ -528,25 +528,18 @@ async def diagonals(ctx, sides : int):
             colour=errorColor
         ), ephemeral=True)
     else:
-        try:
-            await ctx.response.send_message(str((sides * (sides - 3)) / 2))
-        except Exception as DiagonalsGeneralError:
-            await ctx.response.send_message(embed=discord.Embed(
-                title="**__Error__ ❌**",
-                description=DiagonalsGeneralError,
-                colour=errorColor
-            ), ephemeral=True)
+        await ctx.response.send_message((sides * (sides - 3)) / 2)
 
 @client.tree.command(name="factorial", description="Find the factorial of any number")
 @app_commands.describe(number="The number you want to find the factorial of")
 async def factorial(ctx, number : int):
     "Find the factorial of any number"
     try:
-        await ctx.response.send_message(f"Factorial of **{number}** is **{math.factorial(number)}**")
+        await ctx.response.send_message(math.factorial(number))
     except ValuError:
         await ctx.response.send_message(embed=discord.Embed(
                 title="**__Error__ ❌**",
-                description="Value has to be an integral and cannot be a negative number",
+                description="Value has to be a whole number and cannot be a negative number",
                 colour=errorColor
             ), ephemeral=True)
 
@@ -559,6 +552,28 @@ async def lcm(ctx, numbers : str):
     for i in list(map(int, numbers.split(","))):
         lcm = lcm*i//math.gcd(lcm, i)
     await ctx.response.send_message(lcm)
+
+@client.tree.command(name="anglesum", description="Find the sum of the angles of a polygon with 'n' sides")
+@app_commands.describe(sides="The number of sides on the polygon")
+async def anglesum(ctx, sides : int):
+    if sides == 2 or sides == 1 or sides <= 0:
+        await ctx.response.send_message(embed=discord.Embed(
+            title="**__Error__ ❌**",
+            description=f"There cannot be a polygon with {str(sides)} sides",
+            colour=errorColor
+        ), ephemeral=True)
+    else:
+        await ctx.response.send_message((sides - 2) * 180)
+
+@client.tree.command(name="to_binary", description="Convert a number to binary")
+@app_commands.describe(number="Number you want to convert to binary")
+async def to_binary(ctx, number : int):
+    await ctx.response.send_message(bin(number)[2:])
+
+@client.tree.command(name="from_binary", description="Convert a binary to number")
+@app_commands.describe(binary="The binary you want to convert to number")
+async def from_binary(ctx, binary : str):
+    await ctx.response.send_message(int(binary, 2))
 
 """Question math"""
 @client.tree.command(name="question_add", description="Ask you an addition question")
@@ -637,14 +652,7 @@ async def embed(
         embed.set_thumbnail(url=header_img)
         embed.set_footer(text=footer)
 
-        await ctx.response.send_message(
-            embed=discord.Embed(
-                description=":white_check_mark: Embed sent", 
-                colour=themeColor
-            ), 
-            ephemeral = True
-        )
-        await ctx.channel.send(embed=embed)
+        await ctx.response.send_message(embed=embed)
     except Exception as EmbedGeneralError:
         await ctx.response.send_message(embed=discord.Embed(
             title="**__Error__ ❌**",
@@ -2721,6 +2729,9 @@ async def line_graph(
     horizontal_objects : str
 ):
     try:
+        input_vertical_objects = vertical_objects
+        input_horizontal_objects = horizontal_objects
+
         vertical_objects = vertical_objects.replace(" ", "")
         horizontal_objects = horizontal_objects.replace(" ", "")
         plt.plot(
@@ -2733,8 +2744,12 @@ async def line_graph(
         plt.ylabel(vertical_name)
         plt.grid(True)
 
-        plt.savefig("mpl_plots/temp_plot.png")
-        await ctx.response.send_message(file=discord.File("mpl_plots/temp_plot.png"))
+        plt.savefig("mpl_plots/temp_plot.png")        
+
+        await ctx.response.send_message(
+            f"**Inputted values:**\nY: {input_vertical_objects}\nX: {input_horizontal_objects}", 
+            file=discord.File("mpl_plots/temp_plot.png")
+        )
         plt.close()
         os.remove("mpl_plots/temp_plot.png")
     except ValueError:
@@ -2767,6 +2782,9 @@ async def bar_graph(
     horizontal_objects : str
 ):
     try:
+        input_vertical_objects = vertical_objects
+        input_horizontal_objects = horizontal_objects
+
         vertical_objects = vertical_objects.replace(" ", "")
         horizontal_objects = horizontal_objects.replace(" ", "")
         plt.bar(
@@ -2780,7 +2798,10 @@ async def bar_graph(
         plt.grid(True)
         
         plt.savefig("mpl_plots/temp_bar.png")
-        await ctx.response.send_message(file=discord.File("mpl_plots/temp_bar.png"))
+        await ctx.response.send_message(
+            f"**Inputted values:**\nY: {input_vertical_objects}\nX: {input_horizontal_objects}", 
+            file=discord.File("mpl_plots/temp_bar.png")
+        )
         plt.close()
         os.remove("mpl_plots/temp_bar.png")
     except ValueError:
@@ -2809,13 +2830,18 @@ async def pie_chart(
     labels : str
 ):
     try:
+        input_values = values
+
         values = values.replace(" ", "")
 
         plt.pie(list(map(int, values.split(","))), labels=labels.split(","), autopct='%1.1f%%')
         plt.title(name + "\nMade using "+variables.BOT_NAME)
 
         plt.savefig("mpl_plots/temp_pie.png")
-        await ctx.response.send_message(file=discord.File("mpl_plots/temp_pie.png"))
+        await ctx.response.send_message(
+            f"**Inputted values:**\n{input_values}", 
+            file=discord.File("mpl_plots/temp_pie.png")
+        )
         plt.close()
         os.remove("mpl_plots/temp_pie.png")
     except ValueError:
@@ -2959,19 +2985,6 @@ async def __type(ctx, time : int):
         await ctx.response.send_message("Started typing for **"+str(time)+"** seconds", ephemeral=True)
         async with ctx.channel.typing():
             await asyncio.sleep(time)
-    else:
-        await ctx.response.send_message(embed = discord.Embed(
-            title="__Error__ ❌",
-            description="You do now have permissions to run this command",
-            colour = errorColor
-        ), ephemeral=True)
-
-@client.tree.command(name="__tts", description="Owner command")
-@app_commands.describe(message="Message")
-async def __tts(ctx, message : str, ephemeral : bool = True):
-    "Send a text to speech message"
-    if ctx.user.id == client.owner_id:
-        await ctx.response.send_message(message, tts=True, ephemeral=ephemeral)
     else:
         await ctx.response.send_message(embed = discord.Embed(
             title="__Error__ ❌",

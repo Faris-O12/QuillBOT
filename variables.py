@@ -93,6 +93,9 @@ MATH_COMMANDS="""
 **19. diagonals** sides : Find the amount of diagonals a poligon can have, given its sides
 **20. factorial** number : Find the factorial of any number
 **21. lcm** numbers : Find the least common multiply of the numbers
+**22 anglesum** sides : Find the sum of angles of a polygon given the sides
+**23. to_binary** number : Convert the number to binary
+**24. from_binary** binary : Convert the binary to a number
 """
 QUESTIONMATH_COMMANDS="""
 **1. question_add** time(Default : 10) : Gives you a random addition question
